@@ -10,10 +10,23 @@ public class EnemyController : MonoBehaviour {
     [SerializeField]
     private float moveSpeed;
 
+    //Movement range;
+    private float minX;
+    private float maxX;
+    private float minY;
+    private float maxY;
+
 	// Use this for initialization
 	void Start () 
     {
-        randomPos = new Vector3(Random.Range(-11, 11), Random.Range(-3, 4), 0);
+        minX = Camera.main.ScreenToWorldPoint(new Vector3(60, 0, 0)).x;
+        maxX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - 60, 0, 0)).x;
+        minY = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height - 100, 0)).y;
+        maxY = Camera.main.ScreenToWorldPoint(new Vector3(0, 100, 0)).y;
+
+        Debug.Log(minY + ", " + maxY);
+
+        randomPos = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
         gameManager = GameManager.instance;
 	}
 	
@@ -21,9 +34,9 @@ public class EnemyController : MonoBehaviour {
 	void Update () 
     {
         transform.position = Vector3.Lerp(transform.position, randomPos, Time.deltaTime * moveSpeed);
-        if (Vector3.Distance(transform.position, randomPos) <= 0.01f)
+        if (Vector3.Distance(transform.position, randomPos) <= 0.1f)
         {
-            randomPos = new Vector3(Random.Range(-11, 11), Random.Range(-3, 4), 0);
+            randomPos = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
         }
 	}
 

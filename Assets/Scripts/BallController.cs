@@ -53,7 +53,7 @@ public class BallController : MonoBehaviour {
 
     void Reset()
     {
-        rbody.velocity = Vector3.zero;
+        rbody.velocity = Vector2.zero;
         transform.parent = GameObject.FindGameObjectWithTag("Player").transform;
         transform.localPosition = startPosition;
         launched = false;
