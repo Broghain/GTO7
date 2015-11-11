@@ -30,7 +30,9 @@ public class ProjectileController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.position = transform.position + (transform.up * (Time.deltaTime * moveSpeed));
+        Vector3 nextPosition = transform.position + (transform.up * (Time.deltaTime * moveSpeed));
+        transform.position = new Vector3(nextPosition.x, nextPosition.y, 0);
+
         if (isTracking)
         {
             if (trackingTimer >= trackingDelay)
@@ -41,7 +43,8 @@ public class ProjectileController : MonoBehaviour {
                 }
                 else
                 {
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(target.transform.position), trackingPrecision * Time.deltaTime);
+                    Vector3 direction = (target.transform.position - transform.position).normalized;
+                    transform.up = Vector3.Lerp(transform.up, direction, Time.deltaTime * trackingPrecision);
                 }
             }
             else

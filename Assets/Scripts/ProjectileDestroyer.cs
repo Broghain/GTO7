@@ -51,5 +51,6 @@ public class ProjectileDestroyer : MonoBehaviour {
     public void SetParent(Transform parent)
     {
         this.parent = parent;
+        transform.parent = parent;
     }
 }

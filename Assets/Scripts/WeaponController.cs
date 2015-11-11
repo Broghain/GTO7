@@ -38,7 +38,6 @@ public class WeaponController : MonoBehaviour {
             instances[i].SetActive(false);
             instances[i].name = "Unused" + projectilePrefab.name;
             instances[i].GetComponent<ProjectileDestroyer>().SetParent(projectileParent.transform);
-            instances[i].transform.SetParent(projectileParent.transform);
         }
 	}
 	
@@ -49,14 +48,10 @@ public class WeaponController : MonoBehaviour {
         {
             foreach (GameObject spawner in spawners)
             {
-                Debug.Log("Index " + instanceIndex);
-                Debug.Log("Count " + instanceCount);
                 if (instances[instanceIndex].activeSelf)
                 {
-                    Debug.Log("Give us a new projectile please");
                     instances.Insert(instanceIndex, (GameObject)Instantiate(projectilePrefab, new Vector3(1000, 1000, 1000), Quaternion.identity));
                     instances[instanceIndex].GetComponent<ProjectileDestroyer>().SetParent(projectileParent.transform);
-                    instances[instanceIndex].transform.SetParent(projectileParent.transform);
                     instanceCount++;
                 }
                 GameObject projectile = instances[instanceIndex];
