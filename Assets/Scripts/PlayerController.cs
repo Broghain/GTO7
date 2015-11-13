@@ -8,10 +8,6 @@ public class PlayerController : MonoBehaviour {
     private float xSpeed = 1.0f;
     private float ySpeed = 1.0f;
 
-    private GameManager gameManager = null;
-
-    private Vector3 startPosition = Vector3.zero;
-
     //Movement range;
     private float minX;
     private float maxX;
@@ -23,10 +19,6 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        gameManager = GameManager.instance;
-
-        startPosition = transform.position;
-
         minX = Camera.main.ScreenToWorldPoint(new Vector3(60, 0, 0)).x;
         maxX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - 60, 0, 0)).x;
         minY = Camera.main.ScreenToWorldPoint(new Vector3(0, 60, 0)).y;
