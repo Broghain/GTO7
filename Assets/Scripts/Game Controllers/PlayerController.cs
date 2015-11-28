@@ -9,17 +9,13 @@ public class PlayerController : MonoBehaviour {
     private float ySpeed = 1.0f;
 
     //Movement range;
-    private float minX;
-    private float maxX;
-    private float minY;
-    private float maxY;
+    private Vector3 bottomLeft;
+    private Vector3 topRight;
 
 	// Use this for initialization
 	void Start () {
-        minX = Camera.main.ScreenToWorldPoint(new Vector3(60, 0, 0)).x;
-        maxX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - 60, 0, 0)).x;
-        minY = Camera.main.ScreenToWorldPoint(new Vector3(0, 60, 0)).y;
-        maxY = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height - 60, 0)).y;
+        bottomLeft = Camera.main.ScreenToWorldPoint(Vector3.zero);
+        topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
 	}
 	
 	// Update is called once per frame
@@ -33,7 +29,7 @@ public class PlayerController : MonoBehaviour {
         if (Mathf.Abs(verticalInput) > 0)
         {
             float newYPos = transform.position.y + verticalInput * (Time.deltaTime * (moveSpeed + ySpeed));
-            newYPos = Mathf.Clamp(newYPos, minY, maxY);
+            newYPos = Mathf.Clamp(newYPos, bottomLeft.y, topRight.y);
             transform.position = new Vector3(transform.position.x, newYPos, 0);
             ySpeed += (moveSpeed / 100);
         }
@@ -46,7 +42,7 @@ public class PlayerController : MonoBehaviour {
         if (Mathf.Abs(horizontalInput) > 0)
         {
             float newXPos = transform.position.x + horizontalInput * (Time.deltaTime * (moveSpeed + xSpeed));
-            newXPos = Mathf.Clamp(newXPos, minX, maxX);
+            newXPos = Mathf.Clamp(newXPos, bottomLeft.x, topRight.x);
             transform.position = new Vector3(newXPos, transform.position.y, 0);
             xSpeed += (moveSpeed / 100);
         }
