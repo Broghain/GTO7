@@ -33,7 +33,7 @@ public class ObjectPooler : MonoBehaviour {
             instances.Add((GameObject)Instantiate(pooledObjectPrefab, new Vector3(1000, 1000, 1000), Quaternion.identity));
             instances[i].SetActive(false);
             instances[i].name = "Unused" + pooledObjectPrefab.name;
-            instances[i].GetComponent<PooledObject>().SetParent(pooledObjectParent.transform);
+            instances[i].GetComponent<PooledObjectBehaviour>().SetParent(pooledObjectParent.transform);
         }
 	}
 
@@ -42,7 +42,7 @@ public class ObjectPooler : MonoBehaviour {
         if (instances[instanceIndex].activeSelf)
         {
             instances.Insert(instanceIndex, (GameObject)Instantiate(pooledObjectPrefab, new Vector3(1000, 1000, 1000), Quaternion.identity));
-            instances[instanceIndex].GetComponent<PooledObject>().SetParent(pooledObjectParent.transform);
+            instances[instanceIndex].GetComponent<PooledObjectBehaviour>().SetParent(pooledObjectParent.transform);
             instanceCount++;
         }
         GameObject instance = instances[instanceIndex];

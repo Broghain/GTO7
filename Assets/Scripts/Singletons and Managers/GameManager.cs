@@ -5,9 +5,6 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
 
-    [SerializeField]
-    private GameObject explosionPrefab;
-
     private bool online;
 
     void Awake()
@@ -26,9 +23,4 @@ public class GameManager : MonoBehaviour {
     {
 	
 	}
-
-    public void InstantiateExplosion(Vector3 position)
-    {
-        Instantiate(explosionPrefab, position, Quaternion.identity);
-    }
 }
