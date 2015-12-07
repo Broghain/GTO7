@@ -12,7 +12,7 @@ public class ProjectileController : PooledObjectBehaviour {
 
     private TimeToLive ttl;
     private ObjectTracker tracker;
-    private Collider collider;
+    private Collider trigger;
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +21,7 @@ public class ProjectileController : PooledObjectBehaviour {
 
         ttl = GetComponent<TimeToLive>();
         tracker = GetComponent<ObjectTracker>();
-        collider = GetComponent<Collider>();
+        trigger = GetComponent<Collider>();
     }
 	
 	// Update is called once per frame
@@ -37,10 +37,16 @@ public class ProjectileController : PooledObjectBehaviour {
             }
         }
 
-        if ((transform.position.x < screenUpperLeft.x || transform.position.x > screenLowerRight.x || transform.position.y > screenUpperLeft.y || transform.position.y < screenLowerRight.y)
-            && collider.enabled == true)
+        if ((transform.position.x < screenUpperLeft.x || transform.position.x > screenLowerRight.x || transform.position.y > screenUpperLeft.y || transform.position.y < screenLowerRight.y))
         {
-            collider.enabled = false;
+            if (trigger.enabled == true)
+            {
+                trigger.enabled = false;
+            }
+        }
+        else if (trigger.enabled == false)
+        {
+            trigger.enabled = true;
         }
 	}
 
@@ -51,7 +57,7 @@ public class ProjectileController : PooledObjectBehaviour {
         gameObject.SetActive(false);
         gameObject.name = "Unused" + gameObject.name;
         transform.position = new Vector3(1000, 1000, 1000);
-        collider.enabled = true;
+        trigger.enabled = true;
         
         if (ttl != null) 
         {

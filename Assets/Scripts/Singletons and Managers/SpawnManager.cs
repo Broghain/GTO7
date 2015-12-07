@@ -13,9 +13,9 @@ public class SpawnManager : MonoBehaviour {
     private float startSpawnBudget = 20; //Points available for the first wave
     private float spawnBudget = 20; //Points available for spending on next wave
 
-    private float waveNumber = 0;
+    //private float waveNumber = 0;
     public int enemyCount = 0; //Enemies in wave
-    private int enemiesOnScreen = 0; //Enemies currently on screen
+    //private int enemiesOnScreen = 0; //Enemies currently on screen
 
     [SerializeField]
     private float timeBetweenWaves = 2.0f;
@@ -57,6 +57,10 @@ public class SpawnManager : MonoBehaviour {
                 enemyCount++;
                 spawnBudget -= enemy.GetSpawnValue();
             }
+        }
+        foreach (GameObject obj in spawnList)
+        {
+            Instantiate(obj, new Vector3(0, 10, 0), Quaternion.identity);
         }
     }
 

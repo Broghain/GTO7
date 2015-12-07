@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
 
-    private bool online;
+    private Transform playerTransform;
 
     void Awake()
     {
@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-        
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 	}
 	
 	// Update is called once per frame
@@ -23,4 +23,9 @@ public class GameManager : MonoBehaviour {
     {
 	
 	}
+
+    public Transform GetPlayer()
+    {
+        return playerTransform;
+    }
 }
