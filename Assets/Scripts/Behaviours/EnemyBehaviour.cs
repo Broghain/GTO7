@@ -13,7 +13,7 @@ public class EnemyBehaviour : MonoBehaviour {
     [SerializeField]
     protected int spawnValue = 5; //Point cost to spawn this enemy
 
-    protected float health;
+    public float health;
     protected float moveSpeed;
     protected float rotationSpeed;
 
@@ -23,31 +23,67 @@ public class EnemyBehaviour : MonoBehaviour {
     protected Vector3 screenLowerRight;
     protected bool isOffScreen = true;
     
-    protected Collider trigger;
+    protected Collider[] triggers;
 
-    public int GetSpawnValue()
+    protected void Initialize()
     {
-        return spawnValue;
+        health = baseHealth * statMultiplier;
+        moveSpeed = baseMoveSpeed * statMultiplier;
+        rotationSpeed = baseRotationSpeed * statMultiplier;
+
+        screenUpperLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0));
+        screenLowerRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0));
+
+        triggers = GetComponents<Collider>();
     }
 
-    public float GetHealth()
+    public int SpawnValue
     {
-        return health;
+        get { return spawnValue; }
     }
 
-    public float GetMoveSpeed()
+    public float Health
     {
-        return moveSpeed;
+        get { return health; }
+        set { health = value; }
     }
 
-    public float GetRotationSpeed()
+    public float MoveSpeed
     {
-        return rotationSpeed;
+        get { return moveSpeed; }
+        set { rotationSpeed = value; }
     }
 
-    public bool IsOffScreen()
+    public float RotationSpeed
     {
-        return isOffScreen;
+        get { return rotationSpeed; }
+        set { rotationSpeed = value; }
+    }
+
+    protected void IsOffScreen()
+    {
+        if ((transform.position.x < screenUpperLeft.x || transform.position.x > screenLowerRight.x || transform.position.y > screenUpperLeft.y || transform.position.y < screenLowerRight.y))
+        {
+            isOffScreen = true;
+            foreach (Collider trigger in triggers)
+            {
+                if (trigger.enabled == true)
+                {
+                    trigger.enabled = false;
+                }
+            }
+        }
+        else
+        {
+            isOffScreen = false;
+            foreach (Collider trigger in triggers)
+            {
+                if (trigger.enabled == false)
+                {
+                    trigger.enabled = true;
+                }
+            }
+        }
     }
 
     protected void TakeDamage(float damage)
@@ -55,12 +91,24 @@ public class EnemyBehaviour : MonoBehaviour {
         health -= damage;
     }
 
-    void OnTriggerEnter2D(Collider2D collider)
+    public void Shoot()
+    {
+
+    }
+
+    public void Die()
+    {
+        Destroy(this.gameObject);
+    }
+
+    void OnTriggerEnter(Collider collider)
     {
         GameObject collidingObject = collider.gameObject;
         if(collidingObject.tag == "Projectile")
         {
-            TakeDamage(1);
+            ProjectileController projectile = collidingObject.GetComponent<ProjectileController>();
+            projectile.DisableBullet();
+            TakeDamage(projectile.GetDamage());
         }
     }
 
