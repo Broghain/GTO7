@@ -4,15 +4,17 @@ using System.Collections.Generic;
 
 public class ProjectileController : PooledObjectBehaviour {
 
+    //attributes
     [SerializeField]
     private float moveSpeed = 1.0f;
-
     [SerializeField]
     private float damage = 10.0f;
 
+    //screen edge
     private Vector3 screenUpperLeft;
     private Vector3 screenLowerRight;
 
+    //optional functionality
     private TimeToLive ttl;
     private ObjectTracker tracker;
     private Collider trigger;

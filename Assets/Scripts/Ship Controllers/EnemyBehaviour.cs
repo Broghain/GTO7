@@ -3,6 +3,11 @@ using System.Collections;
 
 public class EnemyBehaviour : MonoBehaviour {
 
+    //managers
+    protected DifficultyManager diffMng;
+    protected GameManager gameMng;
+
+    //base attribute values
     [SerializeField]
     protected float baseHealth = 100;
     [SerializeField]
@@ -10,36 +15,48 @@ public class EnemyBehaviour : MonoBehaviour {
     [SerializeField]
     protected float baseRotationSpeed = 5;
 
+    //cost to spawn this enemy
     [SerializeField]
-    protected int spawnValue = 5; //Point cost to spawn this enemy
+    protected int spawnCost = 5; 
 
-    public float health;
+    //attributes
+    protected float health;
     protected float moveSpeed;
     protected float rotationSpeed;
 
-    protected float statMultiplier = 1; //Multiply stats for increased/decreased difficulty
-
+    //screen edge
     protected Vector3 screenUpperLeft;
     protected Vector3 screenLowerRight;
     protected bool isOffScreen = true;
     
+    //colliders
     protected Collider[] triggers;
+
+    //weapons
+    protected WeaponController[] weapons;
+
+    //life time of this agent (used for adaptive difficulty)
+    protected float lifeTime = 0.0f;
 
     protected void Initialize()
     {
-        health = baseHealth * statMultiplier;
-        moveSpeed = baseMoveSpeed * statMultiplier;
-        rotationSpeed = baseRotationSpeed * statMultiplier;
+        gameMng = GameManager.instance;
+        diffMng = DifficultyManager.instance;
+        health = baseHealth * diffMng.GetStatMultiplier();
+        moveSpeed = baseMoveSpeed * diffMng.GetStatMultiplier();
+        rotationSpeed = baseRotationSpeed * diffMng.GetStatMultiplier();
 
         screenUpperLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0));
         screenLowerRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0));
 
         triggers = GetComponents<Collider>();
+
+        weapons = GetComponentsInChildren<WeaponController>();
     }
 
-    public int SpawnValue
+    public int SpawnCost
     {
-        get { return spawnValue; }
+        get { return spawnCost; }
     }
 
     public float Health
@@ -93,7 +110,10 @@ public class EnemyBehaviour : MonoBehaviour {
 
     public void Shoot()
     {
-
+        foreach (WeaponController weapon in weapons)
+        {
+            weapon.Shoot();
+        }
     }
 
     public void Die()

@@ -3,17 +3,16 @@ using System.Collections;
 
 public class BomberAttackingPlayer : FSMState {
 
-    private GameManager gameManager;
+    //controllers
     private BomberController bomber;
     private PlayerController player;
 
     private Vector3 randomPosition;
 
-    public BomberAttackingPlayer(Transform thisObject)
+    public BomberAttackingPlayer(Transform bomber, Transform player)
     {
-        gameManager = GameManager.instance;
-        player = gameManager.GetPlayer().GetComponent<PlayerController>(); ;
-        bomber = thisObject.GetComponent<BomberController>();
+        this.player = player.GetComponent<PlayerController>(); ;
+        this.bomber = bomber.GetComponent<BomberController>();
     }
 
     public override void UpdateState()

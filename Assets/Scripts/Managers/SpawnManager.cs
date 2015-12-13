@@ -32,7 +32,6 @@ public class SpawnManager : MonoBehaviour {
     {
         if (enemyCount == 0)
         {
-            Debug.Log("spawn");
             waveSpawnTimer += Time.deltaTime;
             if (waveSpawnTimer >= timeBetweenWaves)
             {
@@ -48,14 +47,13 @@ public class SpawnManager : MonoBehaviour {
         while (spawnBudget > 0)
         {
             int randomIndex = Random.Range(0, enemyTypes.Count);
-            Debug.Log(randomIndex);
             EnemyBehaviour enemy = enemyTypes[randomIndex];
             if (CheckCost(enemy))
             {
                 GameObject enemyObj = enemy.gameObject;
                 spawnList.Add(enemyObj);
                 enemyCount++;
-                spawnBudget -= enemy.SpawnValue;
+                spawnBudget -= enemy.SpawnCost;
             }
         }
         foreach (GameObject obj in spawnList)
@@ -66,7 +64,7 @@ public class SpawnManager : MonoBehaviour {
 
     private bool CheckCost(EnemyBehaviour enemy)
     {
-        if (enemy.SpawnValue <= spawnBudget)
+        if (enemy.SpawnCost <= spawnBudget)
         {
             return true;
         }

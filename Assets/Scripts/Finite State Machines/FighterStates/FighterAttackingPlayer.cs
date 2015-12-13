@@ -3,15 +3,14 @@ using System.Collections;
 
 public class FighterAttackingPlayer : FSMState {
 
-    private GameManager gameManager;
+    //controllers
     private PlayerController player;
     private FighterController fighter;
 
-    public FighterAttackingPlayer(Transform thisObject)
+    public FighterAttackingPlayer(Transform fighter, Transform player)
     {
-        gameManager = GameManager.instance;
-        player = gameManager.GetPlayer().GetComponent<PlayerController>();
-        fighter = thisObject.GetComponent<FighterController>();
+        this.player = player.GetComponent<PlayerController>();
+        this.fighter = fighter.GetComponent<FighterController>();
     }
 
     public override void UpdateState()

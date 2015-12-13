@@ -3,11 +3,12 @@ using System.Collections;
 
 public class FighterDead : FSMState {
 
+    //controller
     private FighterController fighter;
 
-    public FighterDead(Transform thisObject)
+    public FighterDead(Transform fighter)
     {
-        this.fighter = thisObject.GetComponent<FighterController>();
+        this.fighter = fighter.GetComponent<FighterController>();
     }
 
     public override void UpdateState()

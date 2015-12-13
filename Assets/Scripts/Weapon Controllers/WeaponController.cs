@@ -21,10 +21,9 @@ public class WeaponController : MonoBehaviour {
         objectPooler = GetComponent<ObjectPooler>();
 	}
 
-	// Update is called once per frame
-	void Update () {
-        projectileTimer += Time.deltaTime;
-        if (Input.GetButton("Fire1") && projectileTimer >= projectileInterval)
+    public void Shoot()
+    {
+        if (projectileTimer >= projectileInterval)
         {
             projectileTimer = 0;
 
@@ -48,5 +47,10 @@ public class WeaponController : MonoBehaviour {
                 laser.SetStartObject(this.gameObject);
             }
         }
+    }
+
+	// Update is called once per frame
+	void Update () {
+        projectileTimer += Time.deltaTime;
 	}
 }

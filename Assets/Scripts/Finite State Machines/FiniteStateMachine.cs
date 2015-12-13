@@ -51,7 +51,7 @@ public class FiniteStateMachine : MonoBehaviour {
 
         if (currentState != null)
         {
-            currentState.UpdateState();
+            currentState.UpdateState(); //update current state
         }
     }
 
@@ -60,6 +60,7 @@ public class FiniteStateMachine : MonoBehaviour {
         states.Add(state);
     }
 
+    //set values in mecanim state machine
     public void SetValue(string paramName, bool value)
     {
         stateMachine.SetBool(paramName, value);

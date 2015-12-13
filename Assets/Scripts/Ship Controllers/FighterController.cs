@@ -7,15 +7,16 @@ public class FighterController : EnemyBehaviour {
     private FiniteStateMachine stateMachine;
 
 	// Use this for initialization
-	void Start () {
-        stateMachine = GetComponent<FiniteStateMachine>();
-        stateMachine.InitializeStateMachine();
-        stateMachine.AddState(new FighterAttackingPlayer(transform));
-        stateMachine.AddState(new FighterReachedScreenEdge(transform));
-        stateMachine.AddState(new FighterDead(transform));
-
+	void Start () 
+    {
         Initialize();
         transform.rotation = Quaternion.LookRotation(GameManager.instance.GetPlayer().position - transform.position, new Vector3(0, 0, -1));
+
+        stateMachine = GetComponent<FiniteStateMachine>();
+        stateMachine.InitializeStateMachine();
+        stateMachine.AddState(new FighterAttackingPlayer(transform, gameMng.GetPlayer()));
+        stateMachine.AddState(new FighterReachedScreenEdge(transform, gameMng.GetPlayer()));
+        stateMachine.AddState(new FighterDead(transform));
 	}
 	
 	// Update is called once per frame
