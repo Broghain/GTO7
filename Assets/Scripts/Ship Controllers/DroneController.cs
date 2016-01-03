@@ -4,8 +4,9 @@ using System.Collections;
 public class DroneController : EnemyBehaviour {
 
 	// Use this for initialization
-	void Start () {
-	
+	void Start () 
+    {
+        Initialize();
 	}
 	
 	// Update is called once per frame

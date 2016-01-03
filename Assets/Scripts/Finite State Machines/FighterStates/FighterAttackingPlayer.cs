@@ -18,10 +18,19 @@ public class FighterAttackingPlayer : FSMState {
         //Move forward
         fighter.transform.Translate(Vector3.forward * Time.deltaTime * fighter.MoveSpeed);
 
-        if (Vector3.Distance(fighter.transform.position, player.transform.position) < 4)
+        if (Vector3.Distance(fighter.transform.position, player.transform.position) < 5)
         {
-
+            fighter.Shoot(true, player.transform.position);
+            if (fighter.IsMainLeader)
+            {
+                fighter.FormationShoot(player.transform.position);
+            }
         }
+    }
+
+    public override void ResetState()
+    {
+        //nothing to reset
     }
 
     public override StateID GetStateID()

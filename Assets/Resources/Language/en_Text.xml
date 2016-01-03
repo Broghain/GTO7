@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+ 
+<Language>
+  <!--Menu-->
+  <menu.txt.hiscore>High Score:</menu.txt.hiscore>
+  <menu.txt.mostkills>Most Kills:</menu.txt.mostkills>
+  <menu.txt.bestwave>Best Wave:</menu.txt.bestwave>
+  <menu.btn.play>Play</menu.btn.play>
+  <menu.btn.options>Options</menu.btn.options>
+  <menu.btn.quit>Quit</menu.btn.quit>
+  <menu.txt.options>Options</menu.txt.options>
+  <menu.txt.audio>Audio</menu.txt.audio>
+  <menu.txt.language>Language</menu.txt.language>
+  <menu.btn.language>Language</menu.btn.language>
+  <menu.btn.audio>Audio</menu.btn.audio>
+  <menu.txt.fxvol>Sound Effects Volume:</menu.txt.fxvol>
+  <menu.txt.musicvol>Music Volume:</menu.txt.musicvol>
+  <menu.btn.back>Back</menu.btn.back>
+  <menu.btn.close>Close</menu.btn.close>
+  <menu.txt.paused>Paused</menu.txt.paused>
+  <menu.btn.restart>Restart</menu.btn.restart>
+  <menu.txt.gameover>Game Over</menu.txt.gameover>
+
+  <!--UI-->
+  <ui.btn.upgradepanel>Open Upgrade Menu</ui.btn.upgradepanel>
+  <ui.txt.score>Score:</ui.txt.score>
+  <ui.txt.kills>Kills:</ui.txt.kills>
+  <ui.txt.wave>Wave:</ui.txt.wave>
+
+
+  <!--UpgradePanel-->
+  <upgrade.txt.type>Upgrade type</upgrade.txt.type>
+  <upgrade.txt.rank>Current rank</upgrade.txt.rank>
+  <upgrade.txt.hull>Hull</upgrade.txt.hull>
+  <upgrade.txt.shield>Shield</upgrade.txt.shield>
+  <upgrade.txt.bullets>Bullets</upgrade.txt.bullets>
+  <upgrade.txt.lasers>Lasers</upgrade.txt.lasers>
+  <upgrade.txt.rockets>Rockets</upgrade.txt.rockets>
+  <upgrade.txt.pointsavailable>Points available:</upgrade.txt.pointsavailable>
+  <upgrade.btn.apply>Apply</upgrade.btn.apply>
+  <upgrade.txt.info>Upgrade at least one weapon to Rank 1 or higher!</upgrade.txt.info>
+  
+</Language>

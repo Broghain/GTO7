@@ -13,8 +13,13 @@ public class FighterDead : FSMState {
 
     public override void UpdateState()
     {
-        fighter.Die();
+        //do nothing
     }
+    public override void ResetState()
+    {
+        //nothing to reset
+    }
+
     public override StateID GetStateID()
     {
         return StateID.Dead;

@@ -2,6 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public enum WeaponType
+{
+    Bullet,
+    Laser,
+    Rocket,
+    Other
+}
+
 [RequireComponent(typeof(ObjectPooler))]
 public class WeaponController : MonoBehaviour {
 
@@ -10,9 +18,23 @@ public class WeaponController : MonoBehaviour {
     private float projectileTimer = 0.0f;
 
     [SerializeField]
+    private float minInterval = 0.01f;
+    [SerializeField]
+    private float maxInterval = 2.0f;
+
+    [SerializeField]
     private float inaccuracy = 0.0f;
 
+    [SerializeField]
+    private WeaponType weaponType = WeaponType.Other;
+
     private ObjectPooler objectPooler;
+
+    public float Interval
+    {
+        get { return projectileInterval; }
+        set { projectileInterval = value; }
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -27,7 +49,7 @@ public class WeaponController : MonoBehaviour {
         {
             projectileTimer = 0;
 
-            GameObject projectile = objectPooler.GetNextInstance();
+            GameObject projectile = objectPooler.GetNextDynamicInstance();
 
             float accuracy = Random.Range(-inaccuracy, inaccuracy);
             projectile.transform.up = transform.up + (transform.right * accuracy);
@@ -45,6 +67,13 @@ public class WeaponController : MonoBehaviour {
             if (laser != null)
             {
                 laser.SetStartObject(this.gameObject);
+                AudioManager.instance.PlaySoundWithRandomPitch(laser.GetShotClip(), 0.5f, 1.5f);
+            }
+
+            ProjectileController proj = projectile.GetComponent<ProjectileController>();
+            if (proj != null)
+            {
+                AudioManager.instance.PlaySoundWithRandomPitch(proj.GetShotClip(), 0.75f, 1.25f);
             }
         }
     }
@@ -53,4 +82,18 @@ public class WeaponController : MonoBehaviour {
 	void Update () {
         projectileTimer += Time.deltaTime;
 	}
+
+    public float GetMinInterval()
+    {
+        return minInterval;
+    }
+    public float GetMaxInterval()
+    {
+        return maxInterval;
+    }
+
+    public WeaponType GetWeaponType()
+    {
+        return weaponType;
+    }
 }

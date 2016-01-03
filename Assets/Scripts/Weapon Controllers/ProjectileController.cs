@@ -8,7 +8,23 @@ public class ProjectileController : PooledObjectBehaviour {
     [SerializeField]
     private float moveSpeed = 1.0f;
     [SerializeField]
-    private float damage = 10.0f;
+    private float baseDamage = 10.0f;
+    private float damageIncrease = 0.0f;
+
+    [SerializeField]
+    private float minMoveSpeed = 1.0f;
+    [SerializeField]
+    private float maxMoveSpeed = 10.0f;
+    [SerializeField]
+    private float minDamage = 1.0f;
+    [SerializeField]
+    private float maxDamage = 100.0f;
+
+    //sound effects
+    [SerializeField]
+    private AudioClip[] shotSounds;
+    [SerializeField]
+    private AudioClip[] hitSounds;
 
     //screen edge
     private Vector3 screenUpperLeft;
@@ -16,8 +32,20 @@ public class ProjectileController : PooledObjectBehaviour {
 
     //optional functionality
     private TimeToLive ttl;
-    private ObjectTracker tracker;
+    private ObjectChaser tracker;
     private Collider trigger;
+
+    public float MoveSpeed
+    {
+        get { return moveSpeed; }
+        set { moveSpeed = value; }
+    }
+
+    public float Damage
+    {
+        get { return baseDamage + damageIncrease; }
+        set { damageIncrease = value - baseDamage; }
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -25,7 +53,7 @@ public class ProjectileController : PooledObjectBehaviour {
         screenLowerRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0));
 
         ttl = GetComponent<TimeToLive>();
-        tracker = GetComponent<ObjectTracker>();
+        tracker = GetComponent<ObjectChaser>();
         trigger = GetComponent<Collider>();
     }
 	
@@ -36,9 +64,9 @@ public class ProjectileController : PooledObjectBehaviour {
 
         if (ttl != null)
         {
-            if (ttl.GetTimeToLive() <= 0)
+            if (ttl.GetTimer() <= 0)
             {
-                DisableBullet();
+                Disable();
             }
         }
 
@@ -55,17 +83,18 @@ public class ProjectileController : PooledObjectBehaviour {
         }
 	}
 
-    public float GetDamage()
+    public void Disable()
     {
-        return damage;
-    }
-
-    public void DisableBullet()
-    {
-        gameObject.SetActive(false);
-        gameObject.name = "Unused" + gameObject.name;
-        transform.position = new Vector3(1000, 1000, 1000);
-        trigger.enabled = true;
+        if (trigger.enabled)
+        {
+            ParticleManager.instance.SpawnHitParticle(transform.position);
+        }
+        else
+        {
+            trigger.enabled = true;
+        }
+        
+        DisableInPool();
         
         if (ttl != null) 
         {
@@ -76,5 +105,31 @@ public class ProjectileController : PooledObjectBehaviour {
         {
             tracker.Reset();
         }
+    }
+
+    public float GetMinSpeed()
+    {
+        return minMoveSpeed;
+    }
+    public float GetMaxSpeed()
+    {
+        return maxMoveSpeed;
+    }
+    public float GetMinDmg()
+    {
+        return minDamage;
+    }
+    public float GetMaxDmg()
+    {
+        return maxDamage;
+    }
+
+    public AudioClip GetShotClip()
+    {
+        return shotSounds[Random.Range(0, shotSounds.Length)];
+    }
+    public AudioClip GetHitClip()
+    {
+        return hitSounds[Random.Range(0, hitSounds.Length)];
     }
 }

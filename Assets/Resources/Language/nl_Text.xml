@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Language>
+  <!--Menu-->
+  <menu.txt.hiscore>High Score:</menu.txt.hiscore>
+  <menu.txt.mostkills>Hoogste Dodental:</menu.txt.mostkills>
+  <menu.txt.bestwave>Beste Ronde:</menu.txt.bestwave>
+  <menu.btn.play>Spelen</menu.btn.play>
+  <menu.btn.options>Instellingen</menu.btn.options>
+  <menu.btn.quit>Afsluiten</menu.btn.quit>
+  <menu.txt.options>Opties</menu.txt.options>
+  <menu.txt.audio>Geluid</menu.txt.audio>
+  <menu.txt.language>Taal</menu.txt.language>
+  <menu.btn.language>Taal</menu.btn.language>
+  <menu.btn.audio>Geluid</menu.btn.audio>
+  <menu.txt.fxvol>Geluid Effecten Volume:</menu.txt.fxvol>
+  <menu.txt.musicvol>Muziek Volume:</menu.txt.musicvol>
+  <menu.btn.back>Terug</menu.btn.back>
+  <menu.btn.close>Sluiten</menu.btn.close>
+  <menu.txt.paused>Gepauzeerd</menu.txt.paused>
+  <menu.btn.restart>Opnieuw</menu.btn.restart>
+  <menu.txt.gameover>Game Over</menu.txt.gameover>
+
+  <!--UI-->
+  <ui.btn.upgradepanel>Open Upgrade Menu</ui.btn.upgradepanel>
+  <ui.txt.score>Score:</ui.txt.score>
+  <ui.txt.kills>Dodental:</ui.txt.kills>
+  <ui.txt.wave>Ronde:</ui.txt.wave>
+
+
+  <!--UpgradePanel-->
+  <upgrade.txt.type>Upgrade type</upgrade.txt.type>
+  <upgrade.txt.rank>Huidige rang</upgrade.txt.rank>
+  <upgrade.txt.hull>Omhulsel</upgrade.txt.hull>
+  <upgrade.txt.shield>Schild</upgrade.txt.shield>
+  <upgrade.txt.bullets>Kogels</upgrade.txt.bullets>
+  <upgrade.txt.lasers>Lasers</upgrade.txt.lasers>
+  <upgrade.txt.rockets>Raketten</upgrade.txt.rockets>
+  <upgrade.txt.pointsavailable>Punten Beschikbaar:</upgrade.txt.pointsavailable>
+  <upgrade.btn.apply>Toepassen</upgrade.btn.apply>
+  <upgrade.txt.info>Upgrade ten minste één wapen naar rang 1 of hoger!</upgrade.txt.info>
+  
+</Language>

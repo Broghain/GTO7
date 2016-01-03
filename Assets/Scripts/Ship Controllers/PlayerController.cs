@@ -11,6 +11,21 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float maxHealth = 100.0f;
     private float curHealth;
+    [SerializeField]
+    private float maxShield = 50.0f;
+    private float curShield;
+    [SerializeField]
+    private float shieldRegenTime = 5.0f;
+    private float regenTimer = 0.0f;
+    [SerializeField]
+    private float shieldRegenSpeed = 5.0f;
+    [SerializeField]
+    private float experienceRequirement = 100.0f;
+    [SerializeField]
+    private float experienceRequirementMultiplier = 1.5f;
+    private float curExperience = 0.0f;
+
+    private int currentLevel;
 
     //screen edge
     private Vector3 bottomLeft;
@@ -19,25 +34,90 @@ public class PlayerController : MonoBehaviour {
     //weapons
     private WeaponController[] weapons;
 
+    //upgrader
+    private UpgradeController upgrader;
+
+    //particle effects
+    [SerializeField]
+    private ParticleSystem experiencePickupEffect;
+
+    //sound effects
+    [SerializeField]
+    private AudioClip[] experiencePickupSounds;
+
+    public float Health
+    {
+        get { return curHealth; }
+        set { curHealth = value; }
+    }
+    public float MaxHealth
+    {
+        get { return maxHealth; }
+        set { maxHealth = value; }
+    }
+    public float Shield
+    {
+        get { return curShield; }
+        set { curShield = value; }
+    }
+    public float MaxShield
+    {
+        get { return maxShield; }
+        set { maxShield = value; }
+    }
+    public float Experience
+    {
+        get { return curExperience; }
+    }
+    public float MaxExperience
+    {
+        get { return experienceRequirement; }
+    }
+
 	// Use this for initialization
 	void Start () {
         curHealth = maxHealth;
+        curShield = maxShield;
 
         bottomLeft = Camera.main.ScreenToWorldPoint(Vector3.zero);
         topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
 
-        weapons = GetComponentsInChildren<WeaponController>();
+        weapons = GetComponentsInChildren<WeaponController>(true);
+        upgrader = GetComponent<UpgradeController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        UpdateMovement();
-
-        if (Input.GetButton("Fire1"))
+        if (!GameManager.instance.GetPaused())
         {
-            foreach (WeaponController weapon in weapons)
+            UpdateMovement(); 
+
+            if (Input.GetButton("Fire1"))
             {
-                weapon.Shoot();
+                foreach (WeaponController weapon in weapons)
+                {
+                    if (weapon.gameObject.activeSelf)
+                    {
+                        weapon.Shoot();
+                    }
+                }
+            }
+
+            if (curShield < maxShield)
+            {
+                if (regenTimer >= shieldRegenTime)
+                {
+                    curShield += Time.deltaTime * shieldRegenSpeed;
+                }
+                else
+                {
+                    regenTimer += Time.deltaTime;
+                }
+            }
+            else if(regenTimer > 0.0f)
+            {
+                regenTimer = 0.0f;
+                curShield = maxShield;
             }
         }
 	}
@@ -68,6 +148,90 @@ public class PlayerController : MonoBehaviour {
         else
         {
             xSpeed = 1;
+        }
+    }
+
+    public void GainExperience(float amount)
+    {
+        curExperience += amount;
+        if (curExperience > experienceRequirement)
+        {
+            currentLevel++;
+            curExperience -= experienceRequirement;
+            experienceRequirement *= experienceRequirementMultiplier;
+            GameManager.instance.IncreaseScore(1111 * currentLevel);
+
+            if (upgrader != null)
+            {
+                upgrader.AvailablePoints++;
+            }
+        }
+    }
+
+    public WeaponController[] GetWeapons()
+    {
+        return weapons;
+    }
+
+    private void TakeDamage(float damage, Vector3 hitPosition)
+    {
+        if (curShield <= 0)
+        {
+            if (damage >= curHealth / 3)
+            {
+                ParticleManager.instance.SpawnHardHitParticle(hitPosition);
+            }
+            else
+            {
+                ParticleManager.instance.SpawnHitParticle(hitPosition);
+            }
+            curShield = 0;
+            curHealth -= damage;
+            if (curHealth <= 0)
+            {
+                GameManager.instance.GameOver();
+            }
+        }
+        else
+        {
+            curShield -= damage;
+        }
+
+        
+
+        regenTimer = 0.0f;
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.tag == "ExperiencePickup")
+        {
+            GainExperience(10);
+            experiencePickupEffect.Play(true);
+            Destroy(collider.gameObject);
+            AudioManager.instance.PlaySoundWithRandomPitch(experiencePickupSounds[Random.Range(0, experiencePickupSounds.Length)], 0.75f, 1.25f);
+        }
+
+        if (collider.tag == "EnemyProjectile")
+        {
+            ProjectileController projectile = collider.gameObject.GetComponent<ProjectileController>();
+            if (projectile != null)
+            {
+                TakeDamage(projectile.Damage, projectile.transform.position);
+                AudioManager.instance.PlaySoundWithRandomPitch(projectile.GetHitClip(), 0.5f, 1.5f);
+                projectile.Disable();
+            }
+        }
+
+        if (collider.tag == "Enemy")
+        {
+            EnemyBehaviour enemy = collider.gameObject.GetComponent<EnemyBehaviour>();
+            if (enemy != null)
+            {
+                TakeDamage(enemy.CollisionDamage, enemy.transform.position);
+                AudioManager.instance.PlaySoundWithRandomPitch(enemy.GetRandomDeathSound(), 0.75f, 1.25f);
+                enemy.TakeDamage(enemy.CollisionDamage, transform.position);
+            }
         }
     }
 }

@@ -7,8 +7,6 @@ public class BomberAttackingPlayer : FSMState {
     private BomberController bomber;
     private PlayerController player;
 
-    private Vector3 randomPosition;
-
     public BomberAttackingPlayer(Transform bomber, Transform player)
     {
         this.player = player.GetComponent<PlayerController>(); ;
@@ -17,7 +15,18 @@ public class BomberAttackingPlayer : FSMState {
 
     public override void UpdateState()
     {
-        
+        //rotate towards player
+        Vector3 playerPosition = player.transform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(playerPosition - bomber.transform.position, new Vector3(0, 0, -1));
+        bomber.transform.rotation = Quaternion.Slerp(bomber.transform.rotation, targetRotation, Time.deltaTime * bomber.RotationSpeed);
+
+        bomber.Shoot(false, Vector3.zero);
+        bomber.AttackTimer += Time.deltaTime;
+    }
+
+    public override void ResetState()
+    {
+        bomber.AttackTimer = 0.0f;
     }
 
     public override StateID GetStateID()

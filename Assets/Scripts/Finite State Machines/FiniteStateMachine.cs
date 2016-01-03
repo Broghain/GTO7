@@ -7,6 +7,8 @@ public enum StateID
     None,
     ReachedScreenEdge,
     AttackingPlayer,
+    MovingToPosition,
+    InFormation,
     Dead
 }
 
@@ -17,7 +19,7 @@ public class FiniteStateMachine : MonoBehaviour {
 
     private List<FSMState> states = new List<FSMState>();
 
-    private Dictionary<int, StateID> stateHash = new Dictionary<int, StateID>();
+    private Dictionary<int, StateID> stateDictionary = new Dictionary<int, StateID>();
     
     public StateID currentStateID;
     private FSMState currentState;
@@ -30,13 +32,13 @@ public class FiniteStateMachine : MonoBehaviour {
         //Cache all the hashes of the States in our State Machine (case sensitive!)
         foreach (StateID state in (StateID[])System.Enum.GetValues(typeof(StateID)))
         {
-            stateHash.Add(Animator.StringToHash("Base Layer." + state.ToString()), state);
+            stateDictionary.Add(Animator.StringToHash("Base Layer." + state.ToString()), state);
         }
 	}
 
     public void UpdateStateMachine()
     {
-        StateID nextStateID = stateHash[stateMachine.GetCurrentAnimatorStateInfo(0).fullPathHash];
+        StateID nextStateID = stateDictionary[stateMachine.GetCurrentAnimatorStateInfo(0).fullPathHash];
         if (nextStateID != currentStateID) //If state has changed
         {
             currentStateID = nextStateID;
@@ -44,7 +46,12 @@ public class FiniteStateMachine : MonoBehaviour {
             {
                 if (state.GetStateID() == currentStateID)
                 {
+                    if (currentState != null)
+                    {
+                        currentState.ResetState();
+                    }
                     currentState = state;
+                    break;
                 }
             }
         }
@@ -72,5 +79,9 @@ public class FiniteStateMachine : MonoBehaviour {
     public void SetValue(string paramName, int value)
     {
         stateMachine.SetInteger(paramName, value);
+    }
+    public void SetValue(string paramName)
+    {
+        stateMachine.SetTrigger(paramName);
     }
 }

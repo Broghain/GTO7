@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Language>
+  <!--Menu-->
+  <menu.txt.hiscore>High Score:</menu.txt.hiscore>
+  <menu.txt.mostkills>Meisten Töten:</menu.txt.mostkills>
+  <menu.txt.bestwave>Besten Wellen:</menu.txt.bestwave>
+  <menu.btn.play>Spielen</menu.btn.play>
+  <menu.btn.options>Optionen</menu.btn.options>
+  <menu.btn.quit>Abbrechen</menu.btn.quit>
+  <menu.txt.options>Optionen</menu.txt.options>
+  <menu.txt.audio>Klingen</menu.txt.audio>
+  <menu.txt.language>Sprache</menu.txt.language>
+  <menu.btn.language>Sprache</menu.btn.language>
+  <menu.btn.audio>Klingen</menu.btn.audio>
+  <menu.txt.fxvol>Lautstärke:</menu.txt.fxvol>
+  <menu.txt.musicvol>Musiklautstärke:</menu.txt.musicvol>
+  <menu.btn.back>Zurück</menu.btn.back>
+  <menu.btn.close>Verlassen</menu.btn.close>
+  <menu.txt.paused>Angehalten</menu.txt.paused>
+  <menu.btn.restart>Wieder</menu.btn.restart>
+  <menu.txt.gameover>Game Over</menu.txt.gameover>
+
+  <!--UI-->
+  <ui.btn.upgradepanel>Öffnen Upgrade-Menü</ui.btn.upgradepanel>
+  <ui.txt.score>Score:</ui.txt.score>
+  <ui.txt.kills>Siegesanzahl:</ui.txt.kills>
+  <ui.txt.wave>Welle:</ui.txt.wave>
+
+
+  <!--UpgradePanel-->
+  <upgrade.txt.type>Erweiterungstyp</upgrade.txt.type>
+  <upgrade.txt.rank>Aktueller Rang</upgrade.txt.rank>
+  <upgrade.txt.hull>Rumpf</upgrade.txt.hull>
+  <upgrade.txt.shield>Schild</upgrade.txt.shield>
+  <upgrade.txt.bullets>Kugel</upgrade.txt.bullets>
+  <upgrade.txt.lasers>Laser</upgrade.txt.lasers>
+  <upgrade.txt.rockets>Rakete</upgrade.txt.rockets>
+  <upgrade.txt.pointsavailable>Punkte zur Verfügung:</upgrade.txt.pointsavailable>
+  <upgrade.btn.apply>Bewerben</upgrade.btn.apply>
+  <upgrade.txt.info>Rüsten Sie mindestens eine Waffe, um Rang 1 oder höher!</upgrade.txt.info>
+  
+</Language>

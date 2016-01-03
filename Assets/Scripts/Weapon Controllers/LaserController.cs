@@ -3,6 +3,21 @@ using System.Collections;
 
 public class LaserController : PooledObjectBehaviour {
 
+    //attributes
+    [SerializeField]
+    private float damage = 10.0f;
+    [SerializeField]
+    private float minDamage = 1.0f;
+    [SerializeField]
+    private float maxDamage = 100.0f;
+
+    //sound effects
+    [SerializeField]
+    private AudioClip[] shotSounds;
+    [SerializeField]
+    private AudioClip[] hitSounds;
+
+    //tag to check for when hit
     [SerializeField]
     private string targetTag;
 
@@ -10,6 +25,15 @@ public class LaserController : PooledObjectBehaviour {
 
     private LineRenderer line;
     private TimeToLive ttl;
+
+    private GameObject lastHitObject;
+
+
+    public float Damage
+    {
+        get { return damage; }
+        set { damage = value; }
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -29,14 +53,23 @@ public class LaserController : PooledObjectBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(startPosition, transform.up, out hit, 100))
         {
-            Vector3 endPosition = hit.point;
-            endPosition.z = 0;
-            line.SetPosition(1, endPosition);
+            Vector3 endPosition = startPosition + (transform.up * 100);
             GameObject hitObject = hit.collider.gameObject;
             if (hitObject != null && hitObject.tag == targetTag)
             {
-                //Destroy(hitObject);
+                endPosition = hit.point;
+                if (lastHitObject == null || lastHitObject != hitObject)
+                {
+                    EnemyBehaviour enemy = hitObject.GetComponent<EnemyBehaviour>();
+                    if (enemy != null)
+                    {
+                        enemy.TakeDamage(damage, hit.point);
+                    }
+                }
+                lastHitObject = hitObject;
             }
+            endPosition.z = 0;
+            line.SetPosition(1, endPosition);
         }
         else
         {
@@ -45,20 +78,38 @@ public class LaserController : PooledObjectBehaviour {
             line.SetPosition(1, endPosition);
         }
 
-        if (ttl.GetTimeToLive() <= 0)
+        if (ttl.GetTimer() <= 0)
         {
-            gameObject.SetActive(false);
-            gameObject.name = "Unused" + gameObject.name;
-            transform.position = new Vector3(1000, 1000, 1000);
+            DisableInPool();
+
             ttl.Reset();
 
             line.SetPosition(0, Vector3.one * 1000);
             line.SetPosition(1, Vector3.one * 1000);
+            lastHitObject = null;
         }
 	}
 
     public void SetStartObject(GameObject obj)
     {
         startObject = obj;
+    }
+
+    public float GetMinDmg()
+    {
+        return minDamage;
+    }
+    public float GetMaxDmg()
+    {
+        return maxDamage;
+    }
+
+    public AudioClip GetShotClip()
+    {
+        return shotSounds[Random.Range(0, shotSounds.Length)];
+    }
+    public AudioClip GetHitClip()
+    {
+        return hitSounds[Random.Range(0, hitSounds.Length)];
     }
 }
