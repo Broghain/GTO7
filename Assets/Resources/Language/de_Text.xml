@@ -39,5 +39,10 @@
   <upgrade.txt.pointsavailable>Punkte zur Verfügung:</upgrade.txt.pointsavailable>
   <upgrade.btn.apply>Bewerben</upgrade.btn.apply>
   <upgrade.txt.info>Rüsten Sie mindestens eine Waffe, um Rang 1 oder höher!</upgrade.txt.info>
-  
+
+  <!--API-->
+  <api.btn.login>Anmelden</api.btn.login>
+  <api.btn.logout>Abmelden</api.btn.logout>
+  <api.btn.showtrophy>Trophäen Anzeigen</api.btn.showtrophy>
+
 </Language>

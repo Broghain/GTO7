@@ -40,4 +40,9 @@
   <upgrade.btn.apply>Apply</upgrade.btn.apply>
   <upgrade.txt.info>Upgrade at least one weapon to Rank 1 or higher!</upgrade.txt.info>
   
+  <!--API-->
+  <api.btn.login>Sign In</api.btn.login>
+  <api.btn.logout>Sign Out</api.btn.logout>
+  <api.btn.showtrophy>Show Trophies</api.btn.showtrophy>
+  
 </Language>

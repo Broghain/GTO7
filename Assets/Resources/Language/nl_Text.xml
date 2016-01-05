@@ -39,5 +39,10 @@
   <upgrade.txt.pointsavailable>Punten Beschikbaar:</upgrade.txt.pointsavailable>
   <upgrade.btn.apply>Toepassen</upgrade.btn.apply>
   <upgrade.txt.info>Upgrade ten minste één wapen naar rang 1 of hoger!</upgrade.txt.info>
+
+  <!--API-->
+  <api.btn.login>Aanmelden</api.btn.login>
+  <api.btn.logout>Afmelden</api.btn.logout>
+  <api.btn.showtrophy>Toon Trophies</api.btn.showtrophy>
   
 </Language>

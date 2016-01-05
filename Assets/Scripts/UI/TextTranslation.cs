@@ -29,4 +29,10 @@ public class TextTranslation : MonoBehaviour {
     {
         textField.text = languageController.GetTextWithKey(key);
     }
+
+    public void SetKey(string key)
+    {
+        this.key = key;
+        UpdateLanguage();
+    }
 }
