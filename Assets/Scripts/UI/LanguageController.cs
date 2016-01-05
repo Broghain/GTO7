@@ -34,16 +34,13 @@ public class LanguageController : MonoBehaviour
 
 		currentLanguage = language;
 
-		string BasePath = "Assets/Resources/Language/";
+		string basePath = "Assets/Resources/Language/";
+        string resourcePath = "Language/";
+		string pathText = basePath + currentLanguage + "_Text.xml";
 
-		string PathText = BasePath + currentLanguage + "_Text.xml";
+        pathText = resourcePath + currentLanguage + "_Text"; 
 
-		if (!System.IO.File.Exists(PathText))
-		{
-			PathText = BasePath + defaultLanguage + "_Text.xml"; 
-		}
-
-		ReadXml (PathText, textStrings);
+		ReadXml (pathText, textStrings);
 
 		UpdateTextfields ();
 		PlayerPrefs.SetString("Language", language);
@@ -51,8 +48,10 @@ public class LanguageController : MonoBehaviour
 	
     void ReadXml(string path, Hashtable table)
 	{
+        TextAsset xmlFile = (TextAsset)Resources.Load(path);
+
 		XmlDocument xml = new XmlDocument();
-		xml.Load(path);
+		xml.LoadXml(xmlFile.text);
 
 		XmlElement baseNode = xml.DocumentElement;
 

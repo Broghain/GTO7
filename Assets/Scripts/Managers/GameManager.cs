@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance;
 
     [SerializeField]
+    private bool cheatsEnabled = false;
     private bool godMode = false;
 
     [SerializeField]
@@ -46,6 +47,18 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
+        if (Input.GetKey(KeyCode.F11))
+        {
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                godMode = !godMode;
+            }
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                playerTransform.GetComponent<UpgradeController>().AvailablePoints++;
+            }
+        }
+
         if (Input.GetButtonDown("Cancel") && (!UIManager.instance.UpgradePanelOpen() || gameOver))
         {
             UIManager.instance.TogglePausePanel();

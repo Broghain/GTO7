@@ -9,7 +9,7 @@ public class BomberController : EnemyBehaviour {
     private Vector3 destination;
     
     [SerializeField]
-    private float minAttackTime;
+    private float attackTime;
     private float attackTimer;
 
     public Vector3 Destination
@@ -44,14 +44,7 @@ public class BomberController : EnemyBehaviour {
         stateMachine.SetValue("OffScreen", isOffScreen);
         stateMachine.SetValue("Health", health);
         stateMachine.SetValue("DistanceToDestination", Vector3.Distance(transform.position, destination));
-        if (attackTimer > minAttackTime && Random.Range(0.0f, minAttackTime*1.5f) <= minAttackTime)
-        {
-            stateMachine.SetValue("EndAttack", true);
-        }
-        else
-        {
-            stateMachine.SetValue("EndAttack", false);
-        }
+        stateMachine.SetValue("EndAttack", attackTimer >= attackTime);
         stateMachine.UpdateStateMachine();
 	}
 }
