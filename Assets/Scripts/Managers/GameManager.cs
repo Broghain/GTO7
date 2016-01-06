@@ -17,18 +17,6 @@ public class GameManager : MonoBehaviour {
     private bool paused = false;
     private bool gameOver = false;
 
-    private int highScore = 0;
-    private int mostKills = 0;
-    private int bestWave = 0;
-
-    private int score = 0;
-    private int killCount = 0;
-    private int waveNumber = 0;
-
-    private bool exceededHighScore = false;
-    private bool exceededMostKills = false;
-    private bool exceededBestWave = false;
-
     void Awake()
     {
         instance = this;
@@ -38,10 +26,6 @@ public class GameManager : MonoBehaviour {
 	void Start () 
     {
         UIManager.instance.ToggleUpgradePanel();
-
-        highScore = PlayerPrefs.GetInt("HighScore", 0);
-        mostKills = PlayerPrefs.GetInt("KillCount", 0);
-        bestWave = PlayerPrefs.GetInt("WaveNum", 0);
 	}
 	
 	// Update is called once per frame
@@ -148,61 +132,10 @@ public class GameManager : MonoBehaviour {
         Instantiate(experiencePickup, position, Quaternion.identity);
     }
 
-    public void IncreaseWaveNumber()
-    {
-        waveNumber++;
-        if (waveNumber > bestWave)
-        {
-            exceededBestWave = true;
-        }
-    }
-
-    public int GetWaveNumber()
-    {
-        return waveNumber;
-    }
-
-    public void IncreaseKillCount()
-    {
-        killCount++;
-        if (killCount > mostKills)
-        {
-            exceededMostKills = true;
-        }
-    }
-
-    public int GetKillCount()
-    {
-        return killCount;
-    }
-
-    public void IncreaseScore(int amount)
-    {
-        score += amount;
-        if (score > highScore)
-        {
-            exceededHighScore = true;
-        }
-    }
-
-    public int GetScore()
-    {
-        return score;
-    }
+    
 
     void OnDestroy()
     {
-        if (exceededHighScore)
-        {
-            PlayerPrefs.SetInt("HighScore", score);
-        }
-        if (exceededMostKills)
-        {
-            PlayerPrefs.SetInt("KillCount", killCount);
-        }
-        if (exceededBestWave)
-        {
-            PlayerPrefs.SetInt("WaveNum", waveNumber);
-        }
+        StatManager.instance.CheckStats();
     }
 }

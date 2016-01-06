@@ -23,9 +23,9 @@ public class ScoreController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        scoreText.text = GameManager.instance.GetScore().ToString();
-        killsText.text = GameManager.instance.GetKillCount().ToString();
-        waveText.text = GameManager.instance.GetWaveNumber().ToString();
+        scoreText.text = StatManager.instance.GetScore().ToString();
+        killsText.text = StatManager.instance.GetKillCount().ToString();
+        waveText.text = StatManager.instance.GetWaveNumber().ToString();
 	}
 
 

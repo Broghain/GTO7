@@ -198,11 +198,11 @@ public class EnemyBehaviour : MonoBehaviour {
             if (!ignoreEnemyCount)
             {
                 SpawnManager.instance.DecreaseEnemyCount(1);
-                GameManager.instance.IncreaseKillCount();
+                StatManager.instance.IncreaseKillCount();
             }
         }
 
-        GameManager.instance.IncreaseScore((int)scoreValue);
+        StatManager.instance.IncreaseScore((int)scoreValue);
     }
 
     public void Reset()

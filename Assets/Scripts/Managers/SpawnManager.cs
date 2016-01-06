@@ -62,8 +62,8 @@ public class SpawnManager : MonoBehaviour {
             waveSpawnTimer += Time.deltaTime;
             if (waveSpawnTimer >= timeBetweenWaves)
             {
-                GameManager.instance.IncreaseWaveNumber();
-                spawnBudget = startSpawnBudget * GameManager.instance.GetWaveNumber();
+                StatManager.instance.IncreaseWaveNumber();
+                spawnBudget = startSpawnBudget * StatManager.instance.GetWaveNumber();
                 waveSpawnTimer = 0;
                 SpawnWave();
             }
@@ -120,7 +120,7 @@ public class SpawnManager : MonoBehaviour {
             spline.SetDestroy(true);
         }
 
-        int splineCount = GameManager.instance.GetWaveNumber();
+        int splineCount = StatManager.instance.GetWaveNumber();
         splineCount = Mathf.Clamp(splineCount, 1, 5);
         for (int i = 0; i < splineCount; i++)
         {

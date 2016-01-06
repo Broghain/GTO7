@@ -45,6 +45,9 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private AudioClip[] experiencePickupSounds;
 
+    //achievement
+    private bool gotHit = false;
+
     public float Health
     {
         get { return curHealth; }
@@ -159,7 +162,7 @@ public class PlayerController : MonoBehaviour {
             currentLevel++;
             curExperience -= experienceRequirement;
             experienceRequirement *= experienceRequirementMultiplier;
-            GameManager.instance.IncreaseScore(1111 * currentLevel);
+            StatManager.instance.IncreaseScore(1111 * currentLevel);
 
             if (upgrader != null)
             {
@@ -175,6 +178,7 @@ public class PlayerController : MonoBehaviour {
 
     private void TakeDamage(float damage, Vector3 hitPosition)
     {
+        gotHit = true;
         if (curShield <= 0)
         {
             if (damage >= curHealth / 3)
@@ -233,5 +237,10 @@ public class PlayerController : MonoBehaviour {
                 enemy.TakeDamage(enemy.CollisionDamage, transform.position);
             }
         }
+    }
+
+    public bool PlayerWasHit()
+    {
+        return gotHit;
     }
 }

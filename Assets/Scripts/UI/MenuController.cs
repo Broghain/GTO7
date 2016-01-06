@@ -7,17 +7,22 @@ public class MenuController : MonoBehaviour {
     [SerializeField]
     private OptionsMenuController optionsMenu;
     [SerializeField]
-    private Text highScoreText;
+    private Text scoreText;
     [SerializeField]
-    private Text mostKillsText;
+    private Text killsText;
     [SerializeField]
-    private Text bestWaveText;
+    private Text waveText;
 
     void Start()
     {
-        highScoreText.text = PlayerPrefs.GetInt("HighScore", 0).ToString();
-        mostKillsText.text = PlayerPrefs.GetInt("KillCount", 0).ToString();
-        bestWaveText.text = PlayerPrefs.GetInt("WaveNum", 0).ToString();
+        
+    }
+
+    void Update()
+    {
+        scoreText.text = StatManager.instance.GetHighScore().ToString();
+        killsText.text = StatManager.instance.GetMostKills().ToString();
+        waveText.text = StatManager.instance.GetBestWave().ToString();
     }
 
     public void StartGame()

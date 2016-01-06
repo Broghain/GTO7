@@ -36,6 +36,7 @@ public class APIManager : MonoBehaviour {
     {
         if (GameJolt.API.Manager.Instance.CurrentUser != null)
         {
+            signedIn = false;
             GameJolt.API.Manager.Instance.CurrentUser.SignOut();
             SetSignedInButtons(false);
         }
@@ -45,7 +46,9 @@ public class APIManager : MonoBehaviour {
             {
                 if (success)
                 {
+                    signedIn = true;
                     SetSignedInButtons(true);
+                    StatManager.instance.LoadStats();
                 }
             });
         }
@@ -83,5 +86,23 @@ public class APIManager : MonoBehaviour {
         {
             signInText.GetComponent<TextTranslation>().SetKey("api.btn.login");
         }
+    }
+
+    public void GetStat(string statname)
+    {
+        GameJolt.API.DataStore.Get(statname, false, (string value) =>
+        {
+            if (value != null)
+            {
+                int stat = int.Parse(value);
+                StatManager.instance.LoadOnlineStat(stat, statname);
+            }
+        });
+    }
+
+    public void SetStat(int stat, string statname)
+    {
+        Debug.Log(statname + stat.ToString());
+        GameJolt.API.DataStore.Set(statname, stat.ToString(), false, (bool success) => { });
     }
 }
