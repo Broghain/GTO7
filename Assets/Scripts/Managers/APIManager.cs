@@ -6,11 +6,6 @@ public class APIManager : MonoBehaviour {
 
     public static APIManager instance;
 
-    [SerializeField]
-    private Text signInText;
-    [SerializeField]
-    private Button showTrophiesButton;
-
     private bool signedIn = false;
 
     void Awake()
@@ -38,7 +33,6 @@ public class APIManager : MonoBehaviour {
         {
             signedIn = false;
             GameJolt.API.Manager.Instance.CurrentUser.SignOut();
-            SetSignedInButtons(false);
         }
         else
         {
@@ -47,7 +41,6 @@ public class APIManager : MonoBehaviour {
                 if (success)
                 {
                     signedIn = true;
-                    SetSignedInButtons(true);
                     StatManager.instance.LoadStats();
                 }
             });
@@ -72,20 +65,27 @@ public class APIManager : MonoBehaviour {
 
     public void UnlockTrophy(int trophyId)
     {
-        GameJolt.API.Trophies.Unlock(trophyId);
+        if (signedIn)
+        {
+            GameJolt.API.Trophies.Get(trophyId, (GameJolt.API.Objects.Trophy trophy) =>
+            {
+                if (!trophy.Unlocked)
+                {
+                    GameJolt.API.Trophies.Unlock(trophyId);
+                }
+            });
+        }
     }
 
-    private void SetSignedInButtons(bool value)
+    public void LockTrophy(int trophyId)
     {
-        showTrophiesButton.gameObject.SetActive(value);
-        if (value)
+        GameJolt.API.Trophies.Get(trophyId, (GameJolt.API.Objects.Trophy trophy) =>
         {
-            signInText.GetComponent<TextTranslation>().SetKey("api.btn.logout");
-        }
-        else
-        {
-            signInText.GetComponent<TextTranslation>().SetKey("api.btn.login");
-        }
+            if (trophy.Unlocked)
+            {
+                trophy.Unlocked = false;
+            }
+        });
     }
 
     public void GetStat(string statname)
@@ -102,7 +102,6 @@ public class APIManager : MonoBehaviour {
 
     public void SetStat(int stat, string statname)
     {
-        Debug.Log(statname + stat.ToString());
         GameJolt.API.DataStore.Set(statname, stat.ToString(), false, (bool success) => { });
     }
 }

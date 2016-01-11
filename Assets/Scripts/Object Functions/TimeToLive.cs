@@ -8,11 +8,6 @@ public class TimeToLive : MonoBehaviour {
     private float timer = 0.0f;
 
     [SerializeField]
-    private float minTTL = 1.0f;
-    [SerializeField]
-    private float maxTTL = 5.0f;
-
-    [SerializeField]
     private bool overrideDisableFunction = false;
 
     private PooledObjectBehaviour pooledBehaviour;
@@ -53,15 +48,6 @@ public class TimeToLive : MonoBehaviour {
     public float GetTimer()
     {
         return timer;
-    }
-
-    public float GetMinTTL()
-    {
-        return minTTL;
-    }
-    public float GetMaxTTL()
-    {
-        return maxTTL;
     }
 
     public void Reset()

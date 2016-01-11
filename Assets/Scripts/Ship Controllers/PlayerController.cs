@@ -40,10 +40,12 @@ public class PlayerController : MonoBehaviour {
     //particle effects
     [SerializeField]
     private ParticleSystem experiencePickupEffect;
+    [SerializeField]
+    private ParticleSystem healthPickupEffect;
 
     //sound effects
     [SerializeField]
-    private AudioClip[] experiencePickupSounds;
+    private AudioClip[] pickupSounds;
 
     //achievement
     private bool gotHit = false;
@@ -162,7 +164,7 @@ public class PlayerController : MonoBehaviour {
             currentLevel++;
             curExperience -= experienceRequirement;
             experienceRequirement *= experienceRequirementMultiplier;
-            StatManager.instance.IncreaseScore(1111 * currentLevel);
+            StatManager.instance.IncreaseScore(1000 * currentLevel);
 
             if (upgrader != null)
             {
@@ -210,10 +212,28 @@ public class PlayerController : MonoBehaviour {
     {
         if (collider.tag == "ExperiencePickup")
         {
-            GainExperience(10);
-            experiencePickupEffect.Play(true);
-            Destroy(collider.gameObject);
-            AudioManager.instance.PlaySoundWithRandomPitch(experiencePickupSounds[Random.Range(0, experiencePickupSounds.Length)], 0.75f, 1.25f);
+            Pickup exp = collider.gameObject.GetComponent<Pickup>();
+            if (exp != null)
+            {
+                GainExperience(exp.GetValue());
+                experiencePickupEffect.Play(true);
+                Destroy(collider.gameObject);
+                AudioManager.instance.PlaySoundWithRandomPitch(pickupSounds[Random.Range(0, pickupSounds.Length)], 0.75f, 1.25f);
+            }
+           
+        }
+
+        if (collider.tag == "HealthPickup")
+        {
+            Pickup hp = collider.gameObject.GetComponent<Pickup>();
+            if (hp != null)
+            {
+                curHealth = Mathf.Clamp(curHealth + hp.GetComponent<Pickup>().GetValue(), 0, maxHealth);
+                healthPickupEffect.Play(true);
+                Destroy(collider.gameObject);
+                AudioManager.instance.PlaySoundWithRandomPitch(pickupSounds[Random.Range(0, pickupSounds.Length)], 0.75f, 1.25f);
+            }
+
         }
 
         if (collider.tag == "EnemyProjectile")

@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField]
     private GameObject experiencePickup;
+    [SerializeField]
+    private GameObject healthPickup;
 
     private Transform playerTransform;
 
@@ -25,6 +27,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
     {
+        StatManager.instance.Reset();
         UIManager.instance.ToggleUpgradePanel();
 	}
 	
@@ -40,6 +43,10 @@ public class GameManager : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.U))
             {
                 playerTransform.GetComponent<UpgradeController>().AvailablePoints++;
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                StatManager.instance.IncreaseScore(1000);
             }
         }
 
@@ -127,12 +134,15 @@ public class GameManager : MonoBehaviour {
         return enemies;
     }
 
-    public void DropExperiencePickup(Vector3 position)
+    public GameObject DropExperiencePickup(Vector3 position)
     {
-        Instantiate(experiencePickup, position, Quaternion.identity);
+        return (GameObject)Instantiate(experiencePickup, position, Quaternion.identity);
     }
 
-    
+    public GameObject DropHealthPickup(Vector3 position)
+    {
+        return (GameObject)Instantiate(healthPickup, position, Quaternion.identity);
+    }
 
     void OnDestroy()
     {

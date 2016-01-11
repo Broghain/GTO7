@@ -11,6 +11,9 @@ public class DifficultyManager : MonoBehaviour {
     //average lifetime of enemy ships
     private float avgLifeTime;
 
+    //player
+    private PlayerController player;
+
     //player projectile hit percentages
     private float bulletHitPct;
     private float laserHitPct;
@@ -26,17 +29,15 @@ public class DifficultyManager : MonoBehaviour {
     }
 
 	// Use this for initialization
-	void Start () {
-	
+	void Start () 
+    {
+        player = GameManager.instance.GetPlayer().GetComponent<PlayerController>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        timer += Time.deltaTime;
-        if (timer >= 60)
-        {
+	void Update () 
+    {
 
-        }
 	}
 
     public float GetStatMultiplier()

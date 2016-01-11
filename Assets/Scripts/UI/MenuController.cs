@@ -12,6 +12,11 @@ public class MenuController : MonoBehaviour {
     private Text killsText;
     [SerializeField]
     private Text waveText;
+    
+    [SerializeField]
+    private Text signInText;
+    [SerializeField]
+    private Button showTrophiesButton;
 
     void Start()
     {
@@ -20,6 +25,7 @@ public class MenuController : MonoBehaviour {
 
     void Update()
     {
+        SetSignedInButtons(APIManager.instance.GetSignedIn());
         scoreText.text = StatManager.instance.GetHighScore().ToString();
         killsText.text = StatManager.instance.GetMostKills().ToString();
         waveText.text = StatManager.instance.GetBestWave().ToString();
@@ -33,5 +39,18 @@ public class MenuController : MonoBehaviour {
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    private void SetSignedInButtons(bool value)
+    {
+        showTrophiesButton.gameObject.SetActive(value);
+        if (value)
+        {
+            signInText.GetComponent<TextTranslation>().SetKey("api.btn.logout");
+        }
+        else
+        {
+            signInText.GetComponent<TextTranslation>().SetKey("api.btn.login");
+        }
     }
 }

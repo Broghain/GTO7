@@ -16,15 +16,16 @@ public class SpawnManager : MonoBehaviour {
 
     private ObjectPooler[] enemyPools;
 
-    private List<GameObject> spawnList;
+    private List<GameObject> spawnList; //List of enemies to spawn in each wave
+    private int spawnListIndex = 0;
 
     [SerializeField]
     private float startSpawnBudget = 20; //Points available for the first wave
     private float spawnBudget = 20; //Points available for spending on next wave
 
-    //private float waveNumber = 0;
     private int enemyCount = 0; //Enemies in wave
-    //private int enemiesOnScreen = 0; //Enemies currently on screen
+    private int enemiesOnScreen = 0; //Enemies currently on screen
+    private int maxEnemiesOnScreen = 10; //Max amount of enemies allowed on screen
 
     [SerializeField]
     private float timeBetweenWaves = 2.0f;
@@ -51,6 +52,8 @@ public class SpawnManager : MonoBehaviour {
                 }
             }
         }
+
+        maxEnemiesOnScreen = (int)(maxEnemiesOnScreen * DifficultyManager.instance.GetStatMultiplier());
 	}
 	
 	// Update is called once per frame
@@ -65,12 +68,24 @@ public class SpawnManager : MonoBehaviour {
                 StatManager.instance.IncreaseWaveNumber();
                 spawnBudget = startSpawnBudget * StatManager.instance.GetWaveNumber();
                 waveSpawnTimer = 0;
-                SpawnWave();
+                spawnListIndex = 0;
+                CreateWave();
+                SpawnSplines();
             }
         }
+        else
+        {
+            if (enemiesOnScreen < maxEnemiesOnScreen && spawnListIndex < spawnList.Count)
+            {
+                SpawnEnemy();
+                enemiesOnScreen++;
+                spawnListIndex++;
+            }
+        }
+
 	}
 
-    private void SpawnWave()
+    private void CreateWave()
     {
         spawnBudget *= DifficultyManager.instance.GetStatMultiplier();
         spawnList = new List<GameObject>();
@@ -89,31 +104,10 @@ public class SpawnManager : MonoBehaviour {
             }
             attempts++;
         }
-        
-        foreach (GameObject obj in spawnList)
-        {
-            bool objIsPooled = false;
-            foreach (ObjectPooler pool in enemyPools)
-            {
-                if (pool.GetPooledPrefab() == obj)
-                {
-                    objIsPooled = true;
-                    GameObject enemy = pool.GetNextDynamicInstance();
-                    enemy.name = pool.GetPooledPrefab().name;
-                    enemy.transform.position = new Vector3(Random.Range(-7, 7), 10, 0);
-                    enemy.SetActive(true);
-                    enemy.GetComponent<EnemyBehaviour>().Reset();
-                    break;
-                }
-                
-            }
+    }
 
-            if (!objIsPooled)
-            {
-                Instantiate(obj, new Vector3(0, 10, 0), Quaternion.identity);
-            }
-        }
-
+    private void SpawnSplines()
+    {
         BezierSpline[] deleteSplines = GameObject.FindObjectsOfType<BezierSpline>();
         foreach (BezierSpline spline in deleteSplines)
         {
@@ -127,7 +121,7 @@ public class SpawnManager : MonoBehaviour {
             BezierSpline spline = droneSplines[Random.Range(0, droneSplines.Count)];
 
             Vector3 approxPlayerPosition = GameManager.instance.GetPlayer().position;
-            approxPlayerPosition += new Vector3(Random.Range(-2.0f, 2.0f), Random.Range(-2.0f, 2.0f),0);
+            approxPlayerPosition += new Vector3(Random.Range(-2.0f, 2.0f), Random.Range(-2.0f, 2.0f), 0);
 
             Vector3 splineCenterPosition = spline.GetControlPoint((int)spline.GetControlPointCount() / 2);
             Vector3 splinePosition = approxPlayerPosition - splineCenterPosition;
@@ -138,6 +132,31 @@ public class SpawnManager : MonoBehaviour {
             {
                 swarmSpawner.SetPool(dronePool);
             }
+        }
+    }
+
+    private void SpawnEnemy()
+    {
+        GameObject obj = spawnList[spawnListIndex];
+        bool objIsPooled = false;
+        foreach (ObjectPooler pool in enemyPools)
+        {
+            if (pool.GetPooledPrefab() == obj)
+            {
+                objIsPooled = true;
+                GameObject enemy = pool.GetNextDynamicInstance();
+                enemy.name = pool.GetPooledPrefab().name;
+                enemy.transform.position = new Vector3(Random.Range(-7, 7), 10, 0);
+                enemy.SetActive(true);
+                enemy.GetComponent<EnemyBehaviour>().Reset();
+                break;
+            }
+
+        }
+
+        if (!objIsPooled)
+        {
+            Instantiate(obj, new Vector3(0, 10, 0), Quaternion.identity);
         }
     }
 
@@ -153,5 +172,6 @@ public class SpawnManager : MonoBehaviour {
     public void DecreaseEnemyCount(int amount)
     {
         enemyCount -= amount;
+        enemiesOnScreen--;
     }
 }

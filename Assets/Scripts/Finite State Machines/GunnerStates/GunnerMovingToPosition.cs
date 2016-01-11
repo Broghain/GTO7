@@ -18,7 +18,7 @@ public class GunnerMovingToPosition : FSMState {
         {
             Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(Vector3.zero);
             Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-            randomPos = new Vector3(Random.Range(bottomLeft.x, topRight.x), Random.Range(bottomLeft.y, topRight.y), 0);
+            randomPos = new Vector3(Random.Range(bottomLeft.x, topRight.x), Random.Range(0, topRight.y), 0);
             gunner.Destination = randomPos;
         }
 

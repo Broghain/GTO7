@@ -173,5 +173,6 @@ public class UpgradePanelController : MonoBehaviour {
     {
         upgrader.ApplyUpgrade();
         UpdatePanel();
+        StatManager.instance.CheckUpgradeAchievement();
     }
 }

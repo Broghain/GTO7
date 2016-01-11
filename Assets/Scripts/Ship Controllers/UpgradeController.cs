@@ -114,11 +114,6 @@ public class UpgradeController : MonoBehaviour {
         laserRank += addLaserPts;
         rocketRank += addRocketPts;
 
-        player.MaxHealth += player.MaxHealth * (hullRank * 0.5f);
-        player.MaxShield += player.MaxShield * (shieldRank * 0.25f);
-        player.Health = player.MaxHealth;
-        player.Shield = player.MaxShield;
-
         //unlock weapons
         foreach (WeaponUnlock unlock in bulletWeaponUnlocks)
         {
@@ -144,6 +139,9 @@ public class UpgradeController : MonoBehaviour {
 
         UpgradeWeapons(addBulletPts, playerBulletPrefab, WeaponType.Bullet);
         UpgradeWeapons(addRocketPts, playerRocketPrefab, WeaponType.Rocket);
+        UpgradeWeapons(addRocketPts, playerLaserPrefab, WeaponType.Laser);
+        UpgradeHealth(addHullPts);
+        UpgradeShield(addShieldPts);
 
         addHullPts = 0;
         addShieldPts = 0;
@@ -241,14 +239,26 @@ public class UpgradeController : MonoBehaviour {
         float damagePct = (laser.Damage / laser.GetMaxDmg()) * 100;
         float newDamage = laser.Damage + (damagePct / 10);
         laser.Damage = newDamage;
+    }
 
-        TimeToLive ttl = laser.GetComponent<TimeToLive>();
-        if (ttl != null)
+    private void UpgradeHealth(int iterationCount)
+    {
+        float healthPct = (player.Health / player.MaxHealth) * 100;
+        for(int i = 0; i < iterationCount; i++)
         {
-            float ttlPct = (ttl.TTL/ ttl.GetMaxTTL()) * 100;
-            float newTTL = ttl.TTL + (ttlPct / 60);
-            ttl.TTL = newTTL;
+            player.MaxHealth += player.MaxHealth * 0.75f;
         }
+        player.Health = (player.MaxHealth / 100) * healthPct;
+    }
+
+    private void UpgradeShield(int iterationCount)
+    {
+        float shieldPct = (player.Shield / player.MaxShield) * 100;
+        for (int i = 0; i < iterationCount; i++)
+        {
+            player.MaxShield += player.MaxShield * 0.5f;
+        }
+        player.Shield = (player.MaxShield / 100) * shieldPct;
     }
 
     public void UndoUpgrade()

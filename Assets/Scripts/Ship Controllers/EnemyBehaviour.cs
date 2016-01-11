@@ -23,11 +23,13 @@ public class EnemyBehaviour : MonoBehaviour {
     [SerializeField]
     protected float baseRotationSpeed = 5;
     [SerializeField]
-    protected float baseExpDropCount = 2.0f;
+    protected float baseExpCount = 2.0f;
     [SerializeField]
     protected float baseScoreValue = 25.0f;
     [SerializeField]
     protected float collisionDamage = 15.0f;
+    [SerializeField]
+    protected float baseHealthDropValue = 25.0f;
 
     [SerializeField]
     private bool ignoreEnemyCount = false;
@@ -44,8 +46,9 @@ public class EnemyBehaviour : MonoBehaviour {
     protected float health;
     protected float moveSpeed;
     protected float rotationSpeed;
-    protected float expDropCount;
+    protected float expCount;
     protected float scoreValue;
+    protected float healthDropValue;
 
     //screen edge
     protected Vector3 screenUpperLeft;
@@ -70,8 +73,9 @@ public class EnemyBehaviour : MonoBehaviour {
         health = baseHealth * diffMng.GetStatMultiplier();
         moveSpeed = baseMoveSpeed * diffMng.GetStatMultiplier();
         rotationSpeed = baseRotationSpeed * diffMng.GetStatMultiplier();
-        expDropCount = baseExpDropCount * diffMng.GetStatMultiplier();
+        expCount = baseExpCount * diffMng.GetStatMultiplier();
         scoreValue = baseScoreValue * diffMng.GetStatMultiplier();
+        healthDropValue = Random.Range(0, (baseHealthDropValue * 2) / diffMng.GetStatMultiplier());
 
         screenUpperLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0));
         screenLowerRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0));
@@ -178,11 +182,43 @@ public class EnemyBehaviour : MonoBehaviour {
         ParticleManager.instance.SpawnEnemyExplodeParticle(transform.position);
         AudioManager.instance.PlaySoundWithRandomPitch(deathSounds[Random.Range(0, deathSounds.Length)], 0.75f, 1.25f);
 
-        if (expDropCount > 0)
+        if (expCount > 0) //has experience points to drop?
         {
-            for (int i = 0; i <= expDropCount; i++)
+            float expRemaining = expCount;
+            while(expRemaining > 0) //while remaining exp drops is higher than 0
             {
-                GameManager.instance.DropExperiencePickup(transform.position + new Vector3(Random.Range(-0.25f, 0.25f), Random.Range(-0.25f, 0.25f), 0));
+                GameObject expObj = gameMng.DropExperiencePickup(transform.position + new Vector3(Random.Range(-0.25f, 0.25f), Random.Range(-0.25f, 0.25f), 0));
+                if(expRemaining >= 10) //has 10 or more exp points left?
+                {
+                    expObj.GetComponent<Pickup>().SetValue(10); //drop exp pickup with 10 points
+                }
+                else
+                {
+                    expObj.GetComponent<Pickup>().SetValue(expRemaining); //drop exp pickup with remaining points
+                }
+                expRemaining -= 10;
+            }
+        }
+
+        if (healthDropValue > 0) //has health points to drop?
+        {
+            float healthDropRemaining = healthDropValue;
+            while (healthDropRemaining > 0) //while remaining health drops is higher than 0
+            {
+                if (Random.Range(0, healthDropValue) > baseHealthDropValue)
+                {
+                    GameObject hpObj = gameMng.DropHealthPickup(transform.position + new Vector3(Random.Range(-0.25f, 0.25f), Random.Range(-0.25f, 0.25f), 0));
+                    if (healthDropRemaining >= 25) //has 10 or more health points left?
+                    {
+                        hpObj.GetComponent<Pickup>().SetValue(25); //drop health pickup with 25 points
+                    }
+                    else
+                    {
+                        hpObj.GetComponent<Pickup>().SetValue(healthDropRemaining); //drop health pickup with remaining points
+                    }
+                }
+                healthDropRemaining -= 25;
+                
             }
         }
 
@@ -212,7 +248,7 @@ public class EnemyBehaviour : MonoBehaviour {
         health = baseHealth * diffMng.GetStatMultiplier();
         moveSpeed = baseMoveSpeed * diffMng.GetStatMultiplier();
         rotationSpeed = baseRotationSpeed * diffMng.GetStatMultiplier();
-        expDropCount = baseExpDropCount * diffMng.GetStatMultiplier();
+        expCount = baseExpCount * diffMng.GetStatMultiplier();
 
         weapons = GetComponentsInChildren<WeaponController>();
 
