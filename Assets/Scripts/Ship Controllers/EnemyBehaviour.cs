@@ -70,12 +70,12 @@ public class EnemyBehaviour : MonoBehaviour {
     {
         gameMng = GameManager.instance;
         diffMng = DifficultyManager.instance;
-        health = baseHealth * diffMng.GetStatMultiplier();
-        moveSpeed = baseMoveSpeed * diffMng.GetStatMultiplier();
-        rotationSpeed = baseRotationSpeed * diffMng.GetStatMultiplier();
-        expCount = baseExpCount * diffMng.GetStatMultiplier();
-        scoreValue = baseScoreValue * diffMng.GetStatMultiplier();
-        healthDropValue = Random.Range(0, (baseHealthDropValue * 2) / diffMng.GetStatMultiplier());
+        health = baseHealth * diffMng.GetDifficultyMultiplier();
+        moveSpeed = baseMoveSpeed * diffMng.GetDifficultyMultiplier();
+        rotationSpeed = baseRotationSpeed * diffMng.GetDifficultyMultiplier();
+        expCount = baseExpCount * diffMng.GetDifficultyMultiplier();
+        scoreValue = baseScoreValue * diffMng.GetDifficultyMultiplier();
+        healthDropValue = Random.Range(0, (baseHealthDropValue * 2) / diffMng.GetDifficultyMultiplier());
 
         screenUpperLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0));
         screenLowerRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0));
@@ -245,10 +245,10 @@ public class EnemyBehaviour : MonoBehaviour {
     {
         gameMng = GameManager.instance;
         diffMng = DifficultyManager.instance;
-        health = baseHealth * diffMng.GetStatMultiplier();
-        moveSpeed = baseMoveSpeed * diffMng.GetStatMultiplier();
-        rotationSpeed = baseRotationSpeed * diffMng.GetStatMultiplier();
-        expCount = baseExpCount * diffMng.GetStatMultiplier();
+        health = baseHealth * diffMng.GetDifficultyMultiplier();
+        moveSpeed = baseMoveSpeed * diffMng.GetDifficultyMultiplier();
+        rotationSpeed = baseRotationSpeed * diffMng.GetDifficultyMultiplier();
+        expCount = baseExpCount * diffMng.GetDifficultyMultiplier();
 
         weapons = GetComponentsInChildren<WeaponController>();
 

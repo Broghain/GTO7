@@ -217,7 +217,7 @@ public class PlayerController : MonoBehaviour {
             {
                 GainExperience(exp.GetValue());
                 experiencePickupEffect.Play(true);
-                Destroy(collider.gameObject);
+                exp.DestroyPickup(true);
                 AudioManager.instance.PlaySoundWithRandomPitch(pickupSounds[Random.Range(0, pickupSounds.Length)], 0.75f, 1.25f);
             }
            
@@ -228,12 +228,12 @@ public class PlayerController : MonoBehaviour {
             Pickup hp = collider.gameObject.GetComponent<Pickup>();
             if (hp != null)
             {
-                curHealth = Mathf.Clamp(curHealth + hp.GetComponent<Pickup>().GetValue(), 0, maxHealth);
+                curHealth += hp.GetValue();
+                curHealth = Mathf.Clamp(curHealth, 0, maxHealth);
                 healthPickupEffect.Play(true);
-                Destroy(collider.gameObject);
+                hp.DestroyPickup(true);
                 AudioManager.instance.PlaySoundWithRandomPitch(pickupSounds[Random.Range(0, pickupSounds.Length)], 0.75f, 1.25f);
             }
-
         }
 
         if (collider.tag == "EnemyProjectile")

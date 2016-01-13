@@ -14,4 +14,10 @@ public class Pickup : MonoBehaviour
     {
         return value;
     }
+
+    public void DestroyPickup(bool pickedUp)
+    {
+        DifficultyManager.instance.SetPickupPct(pickedUp);
+        Destroy(this.gameObject);
+    }
 }

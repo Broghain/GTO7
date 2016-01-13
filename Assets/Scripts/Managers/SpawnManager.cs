@@ -53,7 +53,7 @@ public class SpawnManager : MonoBehaviour {
             }
         }
 
-        maxEnemiesOnScreen = (int)(maxEnemiesOnScreen * DifficultyManager.instance.GetStatMultiplier());
+        maxEnemiesOnScreen = (int)(maxEnemiesOnScreen * DifficultyManager.instance.GetDifficultyMultiplier());
 	}
 	
 	// Update is called once per frame
@@ -87,7 +87,7 @@ public class SpawnManager : MonoBehaviour {
 
     private void CreateWave()
     {
-        spawnBudget *= DifficultyManager.instance.GetStatMultiplier();
+        spawnBudget *= DifficultyManager.instance.GetDifficultyMultiplier();
         spawnList = new List<GameObject>();
         int attempts = 0; //attempts to find random enemy to spawn (prevent infinite loop)
         while (spawnBudget > 0)

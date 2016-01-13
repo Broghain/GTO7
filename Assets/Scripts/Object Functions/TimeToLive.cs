@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 
 public class TimeToLive : MonoBehaviour {
@@ -9,6 +10,9 @@ public class TimeToLive : MonoBehaviour {
 
     [SerializeField]
     private bool overrideDisableFunction = false;
+
+    [SerializeField]
+    private UnityEvent altDestroyFunction = null;
 
     private PooledObjectBehaviour pooledBehaviour;
 
@@ -41,6 +45,10 @@ public class TimeToLive : MonoBehaviour {
                     Destroy(gameObject);
                 }
                 
+            }
+            else if(altDestroyFunction != null)
+            {
+                altDestroyFunction.Invoke();
             }
         }
 	}
