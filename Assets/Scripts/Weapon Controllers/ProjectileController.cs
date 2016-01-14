@@ -12,19 +12,21 @@ public class ProjectileController : PooledObjectBehaviour {
     private float damageIncrease = 0.0f;
 
     [SerializeField]
-    private float minMoveSpeed = 1.0f;
-    [SerializeField]
     private float maxMoveSpeed = 10.0f;
     [SerializeField]
-    private float minDamage = 1.0f;
-    [SerializeField]
     private float maxDamage = 100.0f;
+
+    [SerializeField]
+    private WeaponType weaponType = WeaponType.Other;
 
     //sound effects
     [SerializeField]
     private AudioClip[] shotSounds;
     [SerializeField]
     private AudioClip[] hitSounds;
+
+    [SerializeField]
+    private bool trackMiss = false;
 
     //screen edge
     private Vector3 screenUpperLeft;
@@ -66,6 +68,11 @@ public class ProjectileController : PooledObjectBehaviour {
         {
             if (ttl.GetTimer() <= 0)
             {
+                if (trackMiss)
+                {
+                    DifficultyManager.instance.SetHitPct(false, weaponType);
+                }
+
                 Disable();
             }
         }
@@ -107,21 +114,18 @@ public class ProjectileController : PooledObjectBehaviour {
         }
     }
 
-    public float GetMinSpeed()
-    {
-        return minMoveSpeed;
-    }
     public float GetMaxSpeed()
     {
         return maxMoveSpeed;
     }
-    public float GetMinDmg()
-    {
-        return minDamage;
-    }
     public float GetMaxDmg()
     {
         return maxDamage;
+    }
+
+    public WeaponType GetWeaponType()
+    {
+        return weaponType;
     }
 
     public AudioClip GetShotClip()

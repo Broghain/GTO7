@@ -62,9 +62,14 @@ public class LaserController : PooledObjectBehaviour {
                     if (enemy != null)
                     {
                         enemy.TakeDamage(damage, hit.point);
+                        DifficultyManager.instance.SetHitPct(true, WeaponType.Laser);
                     }
                 }
                 lastHitObject = hitObject;
+            }
+            else
+            {
+                DifficultyManager.instance.SetHitPct(false, WeaponType.Laser);
             }
             endPosition.z = 0;
             line.SetPosition(1, endPosition);

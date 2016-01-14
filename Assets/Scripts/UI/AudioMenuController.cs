@@ -10,7 +10,7 @@ public class AudioMenuController : MonoBehaviour {
     private Slider musicSlider;
 
     [SerializeField]
-    private AudioClip testFxClip;
+    private AudioClip testFxClip; //clip played when adjusting sound effects volume
     private float testFxTimer = 0.0f;
     private float testFxTime = 0.0f;
 
@@ -29,18 +29,18 @@ public class AudioMenuController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        testFxTimer = Time.realtimeSinceStartup;
-        if (lastFxVolume != soundFxSlider.value)
+        testFxTimer = Time.realtimeSinceStartup; //countdown time before repeating the sound effects volume clip
+        if (lastFxVolume != soundFxSlider.value) //if the sound effects volume value has changed
         {
             if(testFxTime == 0.0f)
             {
-                testFxTime = Time.realtimeSinceStartup + testFxClip.length / 2;
+                testFxTime = Time.realtimeSinceStartup + testFxClip.length / 2; //set countdown time
             }
             ChangeFXVolume();
             if (testFxTimer >= testFxTime)
             {
-                AudioManager.instance.PlaySound(testFxClip);
-                testFxTime = 0.0f;
+                AudioManager.instance.PlaySound(testFxClip); //play audio effect clip
+                testFxTime = 0.0f; //reset countdown timer
                 lastFxVolume = soundFxSlider.value;
             }
         }

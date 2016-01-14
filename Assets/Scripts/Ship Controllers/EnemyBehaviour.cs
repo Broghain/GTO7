@@ -300,6 +300,7 @@ public class EnemyBehaviour : MonoBehaviour {
             AudioManager.instance.PlaySoundWithRandomPitch(projectile.GetHitClip(), 0.5f, 1.5f);
             TakeDamage(projectile.Damage, projectile.transform.position);
             projectile.Disable();
+            diffMng.SetHitPct(true, projectile.GetWeaponType());
         }
     }
 }

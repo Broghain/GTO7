@@ -51,4 +51,15 @@ public class PositionTracker : MonoBehaviour {
         
         return averagePosition;
     }
+
+    public float GetDistanceMoved()
+    {
+        float distance = 0;
+        Vector3 lastPosition = trackedPositions[0];
+        foreach (Vector3 position in trackedPositions)
+        {
+            distance += Vector3.Distance(lastPosition, position);
+        }
+        return distance;
+    }
 }

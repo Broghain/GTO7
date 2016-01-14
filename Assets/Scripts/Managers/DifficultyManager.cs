@@ -9,10 +9,10 @@ public class DifficultyManager : MonoBehaviour {
     private float diffMultiplier = 1; 
 
     //average lifetime of enemy ships in seconds
-    private float avgLifeTime = 10.0f;
+    private float avgLifeTime = 0.0f;
 
     //Percentage of pickups taken
-    private float pickupTakenPct;
+    public float pickupTakenPct;
    
     private int pickupsDropped = 0;
     private int pickupsTaken = 0;
@@ -21,20 +21,23 @@ public class DifficultyManager : MonoBehaviour {
     private PlayerController player;
 
     //player projectile hits
-    private float bulletHitPct;
-    private float laserHitPct;
-    private float rocketHitPct;
+    public float bulletHitPct = 0.0f;
+    public float laserHitPct = 0.0f;
+    public float rocketHitPct = 0.0f;
 
-    private int bulletsFired = 0;
-    private int lasersFired = 0;
-    private int rocketsFired = 0;
-    private int bulletsHit = 0;
-    private int lasersHit = 0;
-    private int rocketsHit = 0;
+    private float bulletsFired = 0;
+    private float lasersFired = 0;
+    private float rocketsFired = 0;
+    private float bulletsHit = 0;
+    private float lasersHit = 0;
+    private float rocketsHit = 0;
 
     //player health variation per minute
-    private float playerHealthPerMinute;
-    private float timer;
+    private float playerHealthPerMinute = 0;
+    private float lastHealth = 100;
+    private float playerShieldPerMinute = 0;
+    private float lastShield = 100;
+    private float timer = 0;
 
     void Awake()
     {
@@ -50,13 +53,19 @@ public class DifficultyManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-
+        timer += Time.deltaTime;
+        if (timer >= 60)
+        {
+            playerHealthPerMinute = lastHealth - player.Health;
+            playerShieldPerMinute = lastShield - player.Shield;
+            lastHealth = player.Health;
+            lastShield = player.Shield;
+        }
 	}
 
     public void SetAvgLifeTime(float lifeTime)
     {
         avgLifeTime = (avgLifeTime + lifeTime) / 2;
-        Debug.Log(avgLifeTime);
     }
 
     public void SetHitPct(bool hit, WeaponType weapon)
@@ -88,7 +97,6 @@ public class DifficultyManager : MonoBehaviour {
                 rocketHitPct = (rocketsHit / rocketsFired) * 100;
                 break;
         }
-        
     }
 
     public void SetPickupPct(bool taken)
@@ -99,6 +107,18 @@ public class DifficultyManager : MonoBehaviour {
             pickupsTaken++;
         }
         pickupTakenPct = (pickupsDropped / pickupsTaken) * 100;
+    }
+
+    private void SetDifficultyMultiplier()
+    {
+        float playerMovementDistance = -1;
+        PositionTracker tracker = player.GetComponent<PositionTracker>();
+        if (tracker != null)
+        {
+            playerMovementDistance = tracker.GetDistanceMoved();
+        }
+
+
     }
 
     public float GetDifficultyMultiplier()
