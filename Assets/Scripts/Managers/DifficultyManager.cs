@@ -9,7 +9,7 @@ public class DifficultyManager : MonoBehaviour {
     private float diffMultiplier = 1; 
 
     //average lifetime of enemy ships in seconds
-    private float avgLifeTime = 30.0f;
+    private float avgLifeTime = 10.0f;
 
     //Percentage of pickups taken
     private float pickupTakenPct;

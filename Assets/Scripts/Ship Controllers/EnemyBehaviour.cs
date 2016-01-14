@@ -22,14 +22,19 @@ public class EnemyBehaviour : MonoBehaviour {
     protected float baseMoveSpeed = 5;
     [SerializeField]
     protected float baseRotationSpeed = 5;
+   
     [SerializeField]
     protected float baseExpCount = 2.0f;
     [SerializeField]
     protected float baseScoreValue = 25.0f;
     [SerializeField]
-    protected float collisionDamage = 15.0f;
-    [SerializeField]
     protected float baseHealthDropValue = 25.0f;
+
+    [SerializeField]
+    protected float collisionDamage = 15.0f;
+
+    [SerializeField]
+    protected float baseActiveWeaponCount = 2;
 
     [SerializeField]
     private bool ignoreEnemyCount = false;
@@ -46,9 +51,12 @@ public class EnemyBehaviour : MonoBehaviour {
     protected float health;
     protected float moveSpeed;
     protected float rotationSpeed;
+   
     protected float expCount;
     protected float scoreValue;
     protected float healthDropValue;
+
+    protected float activeWeaponCount;
 
     //screen edge
     protected Vector3 screenUpperLeft;
@@ -62,30 +70,9 @@ public class EnemyBehaviour : MonoBehaviour {
     protected WeaponController[] weapons;
 
     //life time of this agent (used for adaptive difficulty)
-    protected float lifeTime = 0.0f;
+    protected float spawnTime;
 
     private PooledObjectBehaviour poolBehaviour;
-
-    protected void Initialize()
-    {
-        gameMng = GameManager.instance;
-        diffMng = DifficultyManager.instance;
-        health = baseHealth * diffMng.GetDifficultyMultiplier();
-        moveSpeed = baseMoveSpeed * diffMng.GetDifficultyMultiplier();
-        rotationSpeed = baseRotationSpeed * diffMng.GetDifficultyMultiplier();
-        expCount = baseExpCount * diffMng.GetDifficultyMultiplier();
-        scoreValue = baseScoreValue * diffMng.GetDifficultyMultiplier();
-        healthDropValue = Random.Range(0, (baseHealthDropValue * 2) / diffMng.GetDifficultyMultiplier());
-
-        screenUpperLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0));
-        screenLowerRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0));
-
-        triggers = GetComponents<Collider>();
-
-        weapons = GetComponentsInChildren<WeaponController>();
-
-        poolBehaviour = GetComponent<PooledObjectBehaviour>();
-    }
 
     public int SpawnCost
     {
@@ -169,26 +156,105 @@ public class EnemyBehaviour : MonoBehaviour {
     {
         foreach (WeaponController weapon in weapons)
         {
-            if (aim)
+            if (weapon.gameObject.activeSelf)
             {
-                weapon.transform.up = Vector3.Normalize(targetPosition - transform.position);
+                if (aim)
+                {
+                    weapon.transform.up = Vector3.Normalize(targetPosition - transform.position);
+                }
+                weapon.Shoot();
             }
-            weapon.Shoot();
         }
     }
 
     public void Die()
     {
+        DifficultyManager.instance.SetAvgLifeTime(Time.time - spawnTime);
+
         ParticleManager.instance.SpawnEnemyExplodeParticle(transform.position);
         AudioManager.instance.PlaySoundWithRandomPitch(deathSounds[Random.Range(0, deathSounds.Length)], 0.75f, 1.25f);
 
+        DropExperience();
+        DropHealth();
+
+        SplineTracer tracer = GetComponent<SplineTracer>();
+        if (tracer != null) //is this enemy using a spline?
+        {
+            tracer.RemoveFromTrack(); //remove this enemy from the list in the splinetracer
+        }
+
+        if (poolBehaviour != null) //is this enemy pooled?
+        {
+            poolBehaviour.DisableInPool(); //disable this enemy
+            if (!ignoreEnemyCount) //does this enemy count toward the wave's enemy count?
+            {
+                SpawnManager.instance.DecreaseEnemyCount(1); //decrease enemy count
+                StatManager.instance.IncreaseKillCount(); //increase kill count
+            }
+        }
+
+        StatManager.instance.IncreaseScore((int)scoreValue);
+    }
+
+    public void Reset()
+    {
+        spawnTime = Time.time;
+        gameMng = GameManager.instance;
+        diffMng = DifficultyManager.instance;
+
+        screenUpperLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0));
+        screenLowerRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0));
+
+        triggers = GetComponents<Collider>();
+        poolBehaviour = GetComponent<PooledObjectBehaviour>();
+
+        SetStats();
+        ActivateWeapons();
+
+        TrailResetter[] trailResetters = GetComponentsInChildren<TrailResetter>();
+        foreach (TrailResetter resetter in trailResetters)
+        {
+            resetter.Reset();
+        }
+    }
+
+    private void SetStats()
+    {
+        health = baseHealth * diffMng.GetDifficultyMultiplier();
+        moveSpeed = baseMoveSpeed * diffMng.GetDifficultyMultiplier();
+        rotationSpeed = baseRotationSpeed * diffMng.GetDifficultyMultiplier();
+
+        expCount = baseExpCount * diffMng.GetDifficultyMultiplier();
+        scoreValue = baseScoreValue * diffMng.GetDifficultyMultiplier();
+        healthDropValue = Random.Range(0, (baseHealthDropValue * 2) / diffMng.GetDifficultyMultiplier());
+    }
+
+    private void ActivateWeapons()
+    {
+        weapons = GetComponentsInChildren<WeaponController>(true);
+        activeWeaponCount = Mathf.Clamp(baseActiveWeaponCount * diffMng.GetDifficultyMultiplier(), 1, weapons.Length);
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            if (i <= activeWeaponCount)
+            {
+                weapons[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                weapons[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void DropExperience()
+    {
         if (expCount > 0) //has experience points to drop?
         {
             float expRemaining = expCount;
-            while(expRemaining > 0) //while remaining exp drops is higher than 0
+            while (expRemaining > 0) //while remaining exp drops is higher than 0
             {
                 GameObject expObj = gameMng.DropExperiencePickup(transform.position + new Vector3(Random.Range(-0.25f, 0.25f), Random.Range(-0.25f, 0.25f), 0));
-                if(expRemaining >= 10) //has 10 or more exp points left?
+                if (expRemaining >= 10) //has 10 or more exp points left?
                 {
                     expObj.GetComponent<Pickup>().SetValue(10); //drop exp pickup with 10 points
                 }
@@ -199,7 +265,10 @@ public class EnemyBehaviour : MonoBehaviour {
                 expRemaining -= 10;
             }
         }
+    }
 
+    private void DropHealth()
+    {
         if (healthDropValue > 0) //has health points to drop?
         {
             float healthDropRemaining = healthDropValue;
@@ -218,44 +287,7 @@ public class EnemyBehaviour : MonoBehaviour {
                     }
                 }
                 healthDropRemaining -= 25;
-                
             }
-        }
-
-        SplineTracer tracer = GetComponent<SplineTracer>();
-        if (tracer != null)
-        {
-            tracer.RemoveFromTrack();
-        }
-
-        if (poolBehaviour != null)
-        {
-            poolBehaviour.DisableInPool();
-            if (!ignoreEnemyCount)
-            {
-                SpawnManager.instance.DecreaseEnemyCount(1);
-                StatManager.instance.IncreaseKillCount();
-            }
-        }
-
-        StatManager.instance.IncreaseScore((int)scoreValue);
-    }
-
-    public void Reset()
-    {
-        gameMng = GameManager.instance;
-        diffMng = DifficultyManager.instance;
-        health = baseHealth * diffMng.GetDifficultyMultiplier();
-        moveSpeed = baseMoveSpeed * diffMng.GetDifficultyMultiplier();
-        rotationSpeed = baseRotationSpeed * diffMng.GetDifficultyMultiplier();
-        expCount = baseExpCount * diffMng.GetDifficultyMultiplier();
-
-        weapons = GetComponentsInChildren<WeaponController>();
-
-        TrailResetter[] trailResetters = GetComponentsInChildren<TrailResetter>();
-        foreach (TrailResetter resetter in trailResetters)
-        {
-            resetter.Reset();
         }
     }
 

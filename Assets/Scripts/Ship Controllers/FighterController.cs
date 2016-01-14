@@ -18,7 +18,6 @@ public class FighterController : EnemyBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-        Initialize();
         transform.rotation = Quaternion.LookRotation(GameManager.instance.GetPlayer().position - transform.position, new Vector3(0, 0, -1));
 
         stateMachine = GetComponent<FiniteStateMachine>();

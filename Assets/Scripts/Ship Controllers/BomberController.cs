@@ -27,8 +27,6 @@ public class BomberController : EnemyBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-        Initialize();
-
         stateMachine = GetComponent<FiniteStateMachine>();
         stateMachine.InitializeStateMachine();
         stateMachine.AddState(new BomberReachedScreenEdge(this.transform));
