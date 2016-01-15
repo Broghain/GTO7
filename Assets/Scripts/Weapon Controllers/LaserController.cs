@@ -44,39 +44,45 @@ public class LaserController : PooledObjectBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Vector3 startPosition = startObject.transform.position;
+        Vector3 startPosition = startObject.transform.position; //startposition of line is at weapon
         startPosition.z = 0;
         line.SetPosition(0, startPosition);
 
         RaycastHit hit;
-        if (Physics.Raycast(startPosition, transform.up, out hit, 100))
+        if (Physics.Raycast(startPosition, transform.up, out hit, 100)) //raycast to check for enemies in laser's path
         {
-            Vector3 endPosition = startPosition + (transform.up * 100);
-            GameObject hitObject = hit.collider.gameObject;
-            if (hitObject != null && hitObject.tag == targetTag)
+            Vector3 endPosition; 
+            GameObject hitObject = hit.collider.gameObject; //get hit object
+            if (hitObject != null && hitObject.tag == targetTag) //if an object was hit and object's tag is target tag ("Enemy")
             {
-                endPosition = hit.point;
-                if (lastHitObject == null || lastHitObject != hitObject)
+                endPosition = hit.point; //end point of line is where hit took place
+                if (lastHitObject == null || lastHitObject != hitObject) //if laser didn't already hit something, or object that was hit last is not this object (prevent damaging enemy every update call)
                 {
                     EnemyBehaviour enemy = hitObject.GetComponent<EnemyBehaviour>();
-                    if (enemy != null)
+                    if (enemy != null && !enemy.IsOffScreen()) //if enemy isn't null and enemy is not off-screen
                     {
-                        enemy.TakeDamage(damage, hit.point);
-                        DifficultyManager.instance.SetHitPct(true, WeaponType.Laser);
+                        enemy.TakeDamage(damage, hit.point); //apply damage
+                        DifficultyManager.instance.SetHitPct(true, WeaponType.Laser); //hit!
+                    }
+                    else
+                    {
+                        endPosition = startPosition + (transform.up * 100); //set end position of line some point far away in up direction
+                        DifficultyManager.instance.SetHitPct(false, WeaponType.Laser); //miss!
                     }
                 }
                 lastHitObject = hitObject;
             }
-            else
+            else //object that was hit does not have correct tag
             {
-                DifficultyManager.instance.SetHitPct(false, WeaponType.Laser);
+                endPosition = startPosition + (transform.up * 100); //set end position of line some point far away in up direction
+                DifficultyManager.instance.SetHitPct(false, WeaponType.Laser); //miss!
             }
             endPosition.z = 0;
             line.SetPosition(1, endPosition);
         }
-        else
+        else //nothing hit by raycast
         {
-            Vector3 endPosition = startPosition + (transform.up * 100);
+            Vector3 endPosition = startPosition + (transform.up * 100); //set end position of line some point far away in up direction
             endPosition.z = 0;
             line.SetPosition(1, endPosition);
         }

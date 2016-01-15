@@ -32,8 +32,7 @@ public class FighterController : EnemyBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        IsOffScreen();
-        stateMachine.SetValue("OffScreen", isOffScreen);
+        stateMachine.SetValue("OffScreen", IsOffScreen());
         stateMachine.SetValue("Health", health);
         stateMachine.UpdateStateMachine();
 	}

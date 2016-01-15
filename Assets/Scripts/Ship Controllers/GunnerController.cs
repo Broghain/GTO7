@@ -59,8 +59,7 @@ public class GunnerController : EnemyBehaviour {
     {
         stateMachine.UpdateStateMachine();
 
-        IsOffScreen();
-        stateMachine.SetValue("OffScreen", isOffScreen);
+        stateMachine.SetValue("OffScreen", IsOffScreen());
         stateMachine.SetValue("Health", health);
         stateMachine.SetValue("DistanceToDestination", Vector3.Distance(transform.position, destination));
         stateMachine.SetValue("IsLeader", isLeader);

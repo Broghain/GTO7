@@ -38,8 +38,7 @@ public class BomberController : EnemyBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        IsOffScreen();
-        stateMachine.SetValue("OffScreen", isOffScreen);
+        stateMachine.SetValue("OffScreen", IsOffScreen());
         stateMachine.SetValue("Health", health);
         stateMachine.SetValue("DistanceToDestination", Vector3.Distance(transform.position, destination));
         stateMachine.SetValue("EndAttack", attackTimer >= attackTime);

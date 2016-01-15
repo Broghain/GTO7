@@ -61,7 +61,6 @@ public class EnemyBehaviour : MonoBehaviour {
     //screen edge
     protected Vector3 screenUpperLeft;
     protected Vector3 screenLowerRight;
-    protected bool isOffScreen = true;
     
     //colliders
     protected Collider[] triggers;
@@ -108,29 +107,15 @@ public class EnemyBehaviour : MonoBehaviour {
         return deathSounds[Random.Range(0, deathSounds.Length)];
     }
 
-    protected void IsOffScreen()
+    public bool IsOffScreen()
     {
         if ((transform.position.x < screenUpperLeft.x || transform.position.x > screenLowerRight.x || transform.position.y > screenUpperLeft.y || transform.position.y < screenLowerRight.y))
         {
-            isOffScreen = true;
-            foreach (Collider trigger in triggers)
-            {
-                if (trigger.enabled == true)
-                {
-                    trigger.enabled = false;
-                }
-            }
+            return true;
         }
         else
         {
-            isOffScreen = false;
-            foreach (Collider trigger in triggers)
-            {
-                if (trigger.enabled == false)
-                {
-                    trigger.enabled = true;
-                }
-            }
+            return false;
         }
     }
 
@@ -294,7 +279,7 @@ public class EnemyBehaviour : MonoBehaviour {
     void OnTriggerEnter(Collider collider)
     {
         GameObject collidingObject = collider.gameObject;
-        if(collidingObject.tag == "Projectile" && !isOffScreen)
+        if(collidingObject.tag == "Projectile" && !IsOffScreen())
         {
             ProjectileController projectile = collidingObject.GetComponent<ProjectileController>();
             AudioManager.instance.PlaySoundWithRandomPitch(projectile.GetHitClip(), 0.5f, 1.5f);
