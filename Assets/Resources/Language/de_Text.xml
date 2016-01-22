@@ -44,5 +44,8 @@
   <api.btn.login>Anmelden</api.btn.login>
   <api.btn.logout>Abmelden</api.btn.logout>
   <api.btn.showtrophy>Trophäen Anzeigen</api.btn.showtrophy>
-
+  <api.txt.noconnection>Kann nicht an GameJolt verbinden</api.txt.noconnection>
+  <api.txt.incorrect>Benutzername/Token Falsch</api.txt.incorrect>
+  <api.input.username>Benutzername</api.input.username>
+  
 </Language>
