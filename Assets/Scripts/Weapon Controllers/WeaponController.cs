@@ -18,11 +18,6 @@ public class WeaponController : MonoBehaviour {
     private float projectileTimer = 0.0f;
 
     [SerializeField]
-    private float minInterval = 0.01f;
-    [SerializeField]
-    private float maxInterval = 2.0f;
-
-    [SerializeField]
     private float inaccuracy = 0.0f;
 
     [SerializeField]
@@ -82,15 +77,6 @@ public class WeaponController : MonoBehaviour {
 	void Update () {
         projectileTimer += Time.deltaTime;
 	}
-
-    public float GetMinInterval()
-    {
-        return minInterval;
-    }
-    public float GetMaxInterval()
-    {
-        return maxInterval;
-    }
 
     public WeaponType GetWeaponType()
     {

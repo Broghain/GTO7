@@ -60,6 +60,8 @@ public class DifficultyManager : MonoBehaviour {
             playerShieldPerMinute = lastShield - player.Shield;
             lastHealth = player.Health;
             lastShield = player.Shield;
+            SetDifficultyMultiplier();
+            timer = 0.0f;
         }
 	}
 
@@ -111,14 +113,12 @@ public class DifficultyManager : MonoBehaviour {
 
     private void SetDifficultyMultiplier()
     {
-        float playerMovementDistance = -1;
+        float playerMovementDistance = 0;
         PositionTracker tracker = player.GetComponent<PositionTracker>();
         if (tracker != null)
         {
             playerMovementDistance = tracker.GetDistanceMoved();
         }
-
-
     }
 
     public float GetDifficultyMultiplier()

@@ -6,19 +6,11 @@ public class ObjectChaser : MonoBehaviour {
     [SerializeField]
     private float trackingDelay = 0.0f;
     private float trackingTimer = 0.0f;
-
-    [SerializeField]
-    private float minDelay = 0.1f;
-    [SerializeField]
-    private float maxDelay = 10.0f;
+    private float delayIncrease = 0.0f;
 
     [SerializeField]
     private float trackingPrecision = 1.0f;
-
-    [SerializeField]
-    private float minPrecision = 0.1f;
-    [SerializeField]
-    private float maxPrecision = 10.0f;
+    private float precisionIncrease = 0.0f;
 
     [SerializeField]
     private string targetTag = "";
@@ -28,14 +20,14 @@ public class ObjectChaser : MonoBehaviour {
 
     public float Delay
     {
-        get { return trackingDelay; }
-        set { trackingDelay = value; }
+        get { return trackingDelay + delayIncrease; }
+        set { delayIncrease = value - trackingDelay; }
     }
 
     public float Precision
     {
-        get { return trackingPrecision; }
-        set { trackingPrecision = value; }
+        get { return trackingPrecision + precisionIncrease; }
+        set { precisionIncrease = value - trackingPrecision; }
     }
 
 	// Use this for initialization
@@ -83,22 +75,5 @@ public class ObjectChaser : MonoBehaviour {
     {
         trackingTimer = 0.0f;
         target = null;
-    }
-
-    public float GetMinDelay()
-    {
-        return minDelay;
-    }
-    public float GetMaxDelay()
-    {
-        return maxDelay;
-    }
-    public float GetMinPrecision()
-    {
-        return minPrecision;
-    }
-    public float GetMaxPrecision()
-    {
-        return maxPrecision;
     }
 }

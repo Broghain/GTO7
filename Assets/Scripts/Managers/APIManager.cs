@@ -24,8 +24,34 @@ public class APIManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-        ShowSignIn();
+        //ShowSignIn();
 	}
+
+    public void SignIn(string username, string token, APILoginController loginMenu)
+    {
+        GameJolt.API.Objects.User user = new GameJolt.API.Objects.User(username, token);
+        user.SignIn((bool success) => {
+            if (success)
+            {
+                signedIn = true;
+                loginMenu.ToggleLoginButton(true);
+                loginMenu.CloseLoginMenu();
+            }
+            else
+            {
+                loginMenu.SetErrorText("api.txt.noconnection");
+            }
+        });
+    }
+
+    public void SignOut()
+    {
+        if (GameJolt.API.Manager.Instance.CurrentUser != null)
+        {
+            signedIn = false;
+            GameJolt.API.Manager.Instance.CurrentUser.SignOut();
+        }
+    }
 
     public void ShowSignIn()
     {

@@ -6,8 +6,7 @@ public class LaserController : PooledObjectBehaviour {
     //attributes
     [SerializeField]
     private float damage = 10.0f;
-    [SerializeField]
-    private float maxDamage = 100.0f;
+    private float damageIncrease = 0.0f;
 
     //sound effects
     [SerializeField]
@@ -26,11 +25,10 @@ public class LaserController : PooledObjectBehaviour {
 
     private GameObject lastHitObject;
 
-
     public float Damage
     {
-        get { return damage; }
-        set { damage = value; }
+        get { return damage + damageIncrease; }
+        set { damageIncrease = value - damage; }
     }
 
 	// Use this for initialization
@@ -102,10 +100,6 @@ public class LaserController : PooledObjectBehaviour {
     public void SetStartObject(GameObject obj)
     {
         startObject = obj;
-    }
-    public float GetMaxDmg()
-    {
-        return maxDamage;
     }
 
     public AudioClip GetShotClip()

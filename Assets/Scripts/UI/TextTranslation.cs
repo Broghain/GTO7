@@ -15,9 +15,7 @@ public class TextTranslation : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-        textField = GetComponent<Text>();
-
-        languageController = FindObjectOfType<LanguageController>();
+        Init();
         if (languageController != null)
         {
             languageController.AddTranslateField(this);
@@ -25,8 +23,18 @@ public class TextTranslation : MonoBehaviour {
         }
 	}
 
+    private void Init()
+    {
+        textField = GetComponent<Text>();
+        languageController = FindObjectOfType<LanguageController>();
+    }
+
     public void UpdateLanguage()
     {
+        if (languageController == null || textField == null)
+        {
+            Init();
+        }
         textField.text = languageController.GetTextWithKey(key);
     }
 

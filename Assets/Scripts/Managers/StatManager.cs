@@ -254,7 +254,7 @@ public class StatManager : MonoBehaviour {
     private void SaveStat(string statname, int statValue)
     {
         PlayerPrefs.SetInt(statname, statValue);
-
+        PlayerPrefs.Save();
         if (APIManager.instance.GetSignedIn()) //if signed in
         {
             APIManager.instance.SetStat(statValue, statname); //set online value

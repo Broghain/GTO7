@@ -7,6 +7,8 @@ public class MenuController : MonoBehaviour {
     [SerializeField]
     private OptionsMenuController optionsMenu;
     [SerializeField]
+    private APILoginController loginMenu;
+    [SerializeField]
     private Text scoreText;
     [SerializeField]
     private Text killsText;
@@ -25,7 +27,6 @@ public class MenuController : MonoBehaviour {
 
     void Update()
     {
-        SetSignedInButtons(APIManager.instance.GetSignedIn());
         scoreText.text = StatManager.instance.GetHighScore().ToString();
         killsText.text = StatManager.instance.GetMostKills().ToString();
         waveText.text = StatManager.instance.GetBestWave().ToString();
@@ -52,5 +53,10 @@ public class MenuController : MonoBehaviour {
         {
             signInText.GetComponent<TextTranslation>().SetKey("api.btn.login");
         }
+    }
+
+    public void SignedInChanged()
+    {
+        SetSignedInButtons(APIManager.instance.GetSignedIn());
     }
 }

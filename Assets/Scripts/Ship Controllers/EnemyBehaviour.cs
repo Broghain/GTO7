@@ -220,7 +220,7 @@ public class EnemyBehaviour : MonoBehaviour {
         activeWeaponCount = Mathf.Clamp(baseActiveWeaponCount * diffMng.GetDifficultyMultiplier(), 1, weapons.Length);
         for (int i = 0; i < weapons.Length; i++)
         {
-            if (i <= activeWeaponCount)
+            if (i < activeWeaponCount)
             {
                 weapons[i].gameObject.SetActive(true);
             }

@@ -156,16 +156,25 @@ public class UpgradeController : MonoBehaviour {
         for (int i = 0; i < iterationCount; i++)
         {
             //increase stats of projectile prefab
-            UpgradeProjectile(projectilePrefab);
+            UpgradeProjectile(projectilePrefab, weaponType);
 
             foreach (WeaponController weapon in player.GetWeapons())
             {
                 if (weapon.GetWeaponType() == weaponType)
                 {
                     //increase weapon stats
-                    float intervalPct = (weapon.Interval / weapon.GetMaxInterval()) * 100;
-                    float newInterval = weapon.Interval - (intervalPct / 200);
-                    weapon.Interval = newInterval;
+                    if (GetWeaponRank(weaponType) < 5)
+                    {
+                        weapon.Interval /= 1.25f;
+                    }
+                    else if (GetWeaponRank(weaponType) < 10)
+                    {
+                        weapon.Interval /= 1.15f;
+                    }
+                    else
+                    {
+                        weapon.Interval /= 1.05f;
+                    }
 
                     ObjectPooler pooler = weapon.GetComponent<ObjectPooler>();
                     if (pooler != null)
@@ -174,7 +183,7 @@ public class UpgradeController : MonoBehaviour {
                         foreach (GameObject obj in pooler.GetPooledObjects())
                         {
                             ProjectileController projectile = obj.GetComponent<ProjectileController>();
-                            UpgradeProjectile(projectile);
+                            UpgradeProjectile(projectile, weaponType);
                         }
                     }
                 }
@@ -195,9 +204,19 @@ public class UpgradeController : MonoBehaviour {
                 if (weapon.GetWeaponType() == weaponType)
                 {
                     //increase weapon stats
-                    float intervalPct = (weapon.Interval / weapon.GetMaxInterval()) * 100;
-                    float newInterval = weapon.Interval - (intervalPct / 200);
-                    weapon.Interval = newInterval;
+                    //increase weapon stats
+                    if (GetWeaponRank(weaponType) < 5)
+                    {
+                        weapon.Interval /= 1.25f;
+                    }
+                    else if (GetWeaponRank(weaponType) < 10)
+                    {
+                        weapon.Interval /= 1.15f;
+                    }
+                    else
+                    {
+                        weapon.Interval /= 1.05f;
+                    }
 
                     ObjectPooler pooler = weapon.GetComponent<ObjectPooler>();
                     if (pooler != null)
@@ -214,31 +233,57 @@ public class UpgradeController : MonoBehaviour {
         }
     }
 
-    private void UpgradeProjectile(ProjectileController projectile)
+    private void UpgradeProjectile(ProjectileController projectile, WeaponType weaponType)
     {
-        float damagePct = (projectile.Damage / projectile.GetMaxDmg()) * 100;
-        float newDamage = projectile.Damage + (damagePct / 10);
-        projectile.Damage = newDamage;
+        if (GetWeaponRank(weaponType) < 5)
+        {
+            projectile.Damage *= 1.25f;
+        }
+        else if (GetWeaponRank(weaponType) < 10)
+        {
+            projectile.Damage *= 1.15f;
+        }
+        else
+        {
+            projectile.Damage *= 1.05f;
+        }
 
         ObjectChaser chaser = projectile.GetComponent<ObjectChaser>();
         if (chaser != null)
         {
-            //increase stats of object chaser
-            float delayPct = (chaser.Delay / chaser.GetMaxDelay()) * 100;
-            float newDelay = chaser.Delay - (delayPct / 75);
-            chaser.Delay = newDelay;
-
-            float precisionPct = (chaser.Precision / chaser.GetMaxPrecision()) * 100;
-            float newPrecision = chaser.Precision + (precisionPct / 75);
-            chaser.Precision = newPrecision;
+            //increase weapon stats
+            if (GetWeaponRank(weaponType) < 5)
+            {
+                chaser.Delay /= 1.25f;
+                chaser.Precision *= 1.25f;
+            }
+            else if (GetWeaponRank(weaponType) < 10)
+            {
+                chaser.Delay /= 1.15f;
+                chaser.Precision *= 1.15f;
+            }
+            else
+            {
+                chaser.Delay /= 1.05f;
+                chaser.Precision *= 1.05f;
+            }
         }
     }
 
     private void UpgradeLaser(LaserController laser)
     {
-        float damagePct = (laser.Damage / laser.GetMaxDmg()) * 100;
-        float newDamage = laser.Damage + (damagePct / 10);
-        laser.Damage = newDamage;
+        if (GetWeaponRank(WeaponType.Laser) < 5)
+        {
+            laser.Damage *= 1.25f;
+        }
+        else if (GetWeaponRank(WeaponType.Laser) < 10)
+        {
+            laser.Damage *= 1.15f;
+        }
+        else
+        {
+            laser.Damage *= 1.05f;
+        }
     }
 
     private void UpgradeHealth(int iterationCount)
@@ -321,6 +366,21 @@ public class UpgradeController : MonoBehaviour {
                 {
                     rank += addRocketPts;
                 }
+                break;
+        }
+        return rank;
+    }
+
+    private int GetWeaponRank(WeaponType weaponType)
+    {
+        int rank = 0;
+        switch (weaponType)
+        {
+            case WeaponType.Bullet: rank = GetRank(UpgradeType.Bullet, false);
+                break;
+            case WeaponType.Rocket: rank = GetRank(UpgradeType.Rocket, false);
+                break;
+            case WeaponType.Laser: rank = GetRank(UpgradeType.Laser, false);
                 break;
         }
         return rank;

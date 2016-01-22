@@ -8,13 +8,8 @@ public class ProjectileController : PooledObjectBehaviour {
     [SerializeField]
     private float moveSpeed = 1.0f;
     [SerializeField]
-    private float baseDamage = 10.0f;
+    private float damage = 10.0f;
     private float damageIncrease = 0.0f;
-
-    [SerializeField]
-    private float maxMoveSpeed = 10.0f;
-    [SerializeField]
-    private float maxDamage = 100.0f;
 
     [SerializeField]
     private WeaponType weaponType = WeaponType.Other;
@@ -45,8 +40,8 @@ public class ProjectileController : PooledObjectBehaviour {
 
     public float Damage
     {
-        get { return baseDamage + damageIncrease; }
-        set { damageIncrease = value - baseDamage; }
+        get { return damage + damageIncrease; }
+        set { damageIncrease = value - damage; }
     }
 
 	// Use this for initialization
@@ -112,15 +107,6 @@ public class ProjectileController : PooledObjectBehaviour {
         {
             tracker.Reset();
         }
-    }
-
-    public float GetMaxSpeed()
-    {
-        return maxMoveSpeed;
-    }
-    public float GetMaxDmg()
-    {
-        return maxDamage;
     }
 
     public WeaponType GetWeaponType()
