@@ -97,7 +97,14 @@ public class APIManager : MonoBehaviour {
             {
                 if (!trophy.Unlocked)
                 {
-                    GameJolt.API.Trophies.Unlock(trophyId);
+                    trophy.Unlock((bool success) =>
+                        {
+                            trophy.DownloadImage((bool completed) =>
+                            {
+                                UIManager.instance.ShowTrophyUnlock(trophy.Title, trophy.Description, trophy.Image);
+                            });
+                        });
+                        
                 }
             });
         }
@@ -112,6 +119,20 @@ public class APIManager : MonoBehaviour {
                 trophy.Unlocked = false;
             }
         });
+    }
+
+    public void GetTrophyUnlocked(int trophyId, APITrophyMenuController trophyMenu, GameObject container, int index, int trophyCount)
+    {
+        if (signedIn)
+        {
+            GameJolt.API.Trophies.Get(trophyId, (GameJolt.API.Objects.Trophy trophy) =>
+            {
+                trophy.DownloadImage((bool success) =>
+                {
+                    trophyMenu.CreateTrophyObj(trophy.Title, trophy.Description, trophy.Image, !trophy.Unlocked, container, index, trophyCount);
+                }); 
+            });
+        }
     }
 
     public void GetStat(string statname)

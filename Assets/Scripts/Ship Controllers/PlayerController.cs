@@ -79,10 +79,31 @@ public class PlayerController : MonoBehaviour {
         get { return experienceRequirement; }
     }
 
+    public int GetLevel()
+    {
+        return currentLevel;
+    }
+
 	// Use this for initialization
 	void Start () {
-        curHealth = maxHealth;
-        curShield = maxShield;
+        if (DataManager.instance.IsLoaded) //did we load a save?
+        {
+            GameData data = DataManager.instance.GetData(); //get saved data
+            curHealth = data.GetHealth();
+            curShield = data.GetShield();
+            curExperience = data.GetExp();
+            currentLevel = data.GetLevel();
+            for (int i = 0; i < currentLevel; i++)
+            {
+                experienceRequirement *= experienceRequirementMultiplier;
+            }
+            transform.position = new Vector3(data.GetPosition()[0], data.GetPosition()[1], 0);
+        }
+        else
+        {
+            curHealth = maxHealth;
+            curShield = maxShield;
+        }
 
         bottomLeft = Camera.main.ScreenToWorldPoint(Vector3.zero);
         topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
@@ -95,7 +116,9 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
         if (!GameManager.instance.GetPaused())
         {
-            UpdateMovement(); 
+#if UNITY_STANDALONE_WIN
+            UpdateMovement(Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
+#endif
 
             if (Input.GetButton("Fire1"))
             {
@@ -127,9 +150,8 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
-    private void UpdateMovement()
+    public void UpdateMovement(float verticalInput, float horizontalInput)
     {
-        float verticalInput = Input.GetAxis("Vertical");
         if (Mathf.Abs(verticalInput) > 0)
         {
             float newYPos = transform.position.y + verticalInput * (Time.deltaTime * (moveSpeed + ySpeed));
@@ -142,7 +164,6 @@ public class PlayerController : MonoBehaviour {
             ySpeed = 1;
         }
 
-        float horizontalInput = Input.GetAxis("Horizontal");
         if (Mathf.Abs(horizontalInput) > 0)
         {
             float newXPos = transform.position.x + horizontalInput * (Time.deltaTime * (moveSpeed + xSpeed));
@@ -180,7 +201,8 @@ public class PlayerController : MonoBehaviour {
 
     private void TakeDamage(float damage, Vector3 hitPosition)
     {
-        gotHit = true;
+        gotHit = true; //used for "no hits taken" trophies
+        UIManager.instance.ShowHitFeedback();
         if (curShield <= 0)
         {
             if (damage >= curHealth / 3)
@@ -202,8 +224,6 @@ public class PlayerController : MonoBehaviour {
         {
             curShield -= damage;
         }
-
-        
 
         regenTimer = 0.0f;
     }

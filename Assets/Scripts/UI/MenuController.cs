@@ -7,7 +7,7 @@ public class MenuController : MonoBehaviour {
     [SerializeField]
     private OptionsMenuController optionsMenu;
     [SerializeField]
-    private APILoginController loginMenu;
+    private Button loadButton;
     [SerializeField]
     private Text scoreText;
     [SerializeField]
@@ -22,7 +22,8 @@ public class MenuController : MonoBehaviour {
 
     void Start()
     {
-        
+        SignedInChanged();
+        loadButton.interactable = DataManager.instance.LoadAvailable();
     }
 
     void Update()
@@ -35,11 +36,17 @@ public class MenuController : MonoBehaviour {
     public void StartGame()
     {
         Application.LoadLevel(1);
+        DataManager.instance.IsLoaded = false;
     }
 
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void LoadGame()
+    {
+        DataManager.instance.LoadGame();
     }
 
     private void SetSignedInButtons(bool value)

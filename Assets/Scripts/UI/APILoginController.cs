@@ -54,6 +54,7 @@ public class APILoginController : MonoBehaviour {
         }
         else
         {
+            transform.parent.gameObject.SetActive(true);
             gameObject.SetActive(true);
         }
     }
@@ -62,6 +63,7 @@ public class APILoginController : MonoBehaviour {
     {
         Reset();
         gameObject.SetActive(false);
+        transform.parent.gameObject.SetActive(false);
     }
 
     private void Reset()

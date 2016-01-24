@@ -24,6 +24,16 @@ public class StatusBarController : MonoBehaviour {
     private GameObject experiencebarLights;
     private float experienceLightsTimer = 0.0f;
 
+    [SerializeField]
+    private Image criticalHealthEffect;
+    private Color criticalColorAlpha;
+
+    [SerializeField]
+    private Image hitFeedbackEffect;
+    private Color hitColorAlpha;
+    private float expectedAlpha;
+    private float currentAlpha;
+
     private PlayerController player;
     private UpgradeController upgrader;
 
@@ -35,6 +45,9 @@ public class StatusBarController : MonoBehaviour {
         lastShieldBarPos = shieldbar.rectTransform.localPosition;
         experiencebarRect = experiencebar.rectTransform.rect;
         experiencebarXPos = -experiencebarRect.width;
+        criticalColorAlpha = criticalHealthEffect.color;
+        hitColorAlpha = hitFeedbackEffect.color;
+        expectedAlpha = 0;
 	}
 	
 	// Update is called once per frame
@@ -67,6 +80,14 @@ public class StatusBarController : MonoBehaviour {
         {
             experiencebarLights.SetActive(false);
         }
+
+        currentAlpha = Mathf.Lerp(currentAlpha, expectedAlpha, Time.deltaTime * 20);
+        if(currentAlpha >= expectedAlpha-1)
+        {
+            expectedAlpha = 0;
+        }
+        hitColorAlpha.a = currentAlpha / 255;
+        hitFeedbackEffect.color = hitColorAlpha;
 	}
 
     public void UpdateHealthBar()
@@ -79,6 +100,18 @@ public class StatusBarController : MonoBehaviour {
 
         float healthPct = (player.Health / player.MaxHealth) * 100;
         healthbarXPos = -healthbarRect.height + ((healthPct / 100) * healthbarRect.height);
+        UpdateCriticalHealthEffect(healthPct);
+    }
+
+    private void UpdateCriticalHealthEffect(float healthPct)
+    {
+        criticalColorAlpha.a = 1.0f - (healthPct/100);
+        criticalHealthEffect.color = criticalColorAlpha;
+    }
+
+    public void ShowHitFeedback()
+    {
+        expectedAlpha = 100;
     }
 
     public void UpdateShieldBar()

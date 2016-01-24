@@ -28,7 +28,17 @@ public class GameManager : MonoBehaviour {
 	void Start () 
     {
         StatManager.instance.Reset();
-        UIManager.instance.ToggleUpgradePanel();
+        if (DataManager.instance.IsLoaded)
+        {
+            GameData data = DataManager.instance.GetData();
+            StatManager.instance.IncreaseScore(data.GetScore());
+            StatManager.instance.IncreaseWaveNumber(data.GetWave()-1);
+            StatManager.instance.IncreaseKillCount(data.GetKills());
+        }
+        else
+        {
+            UIManager.instance.ToggleUpgradePanel();
+        }
 	}
 	
 	// Update is called once per frame
@@ -89,8 +99,23 @@ public class GameManager : MonoBehaviour {
         Application.LoadLevel(0);
     }
 
+    public void SaveGame()
+    {
+        DataManager.instance.SaveGame();
+    }
+
+    public void LoadGame()
+    {
+        if (paused)
+        {
+            TogglePause();
+        }
+        DataManager.instance.LoadGame();
+    }
+
     public void RestartGame()
     {
+        DataManager.instance.IsLoaded = false;
         if (paused)
         {
             TogglePause();

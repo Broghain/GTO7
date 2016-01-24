@@ -20,6 +20,8 @@
   <menu.txt.paused>Paused</menu.txt.paused>
   <menu.btn.restart>Restart</menu.btn.restart>
   <menu.txt.gameover>Game Over</menu.txt.gameover>
+  <menu.btn.load>Load Game</menu.btn.load>
+  <menu.btn.save>Save Game</menu.btn.save>
 
   <!--UI-->
   <ui.btn.upgradepanel>Open Upgrade Menu</ui.btn.upgradepanel>
@@ -47,5 +49,6 @@
   <api.txt.noconnection>Cannot connect to GameJolt</api.txt.noconnection>
   <api.txt.incorrect>Username/Token Incorrect</api.txt.incorrect>
   <api.input.username>Username</api.input.username>
+  <api.txt.trophies>Trophies</api.txt.trophies>
   
 </Language>

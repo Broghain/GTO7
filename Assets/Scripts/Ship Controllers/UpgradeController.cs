@@ -68,6 +68,18 @@ public class UpgradeController : MonoBehaviour {
 	void Start () 
     {
         player = GetComponent<PlayerController>();
+        
+        if (DataManager.instance.IsLoaded) //did we load a save?
+        {
+            GameData data = DataManager.instance.GetData(); //get saved data
+            availablePoints = data.GetUpgradePts();
+            addHullPts = data.GetHullRank() - 1; //-1 because default value is 1
+            addShieldPts = data.GetShieldRank() - 1; //-1 because default value is 1
+            addBulletPts = data.GetBulletRank();
+            addLaserPts = data.GetLaserRank();
+            addRocketPts = data.GetRocketRank();
+            ApplyUpgrade();
+        }
 	}
 	
 	// Update is called once per frame

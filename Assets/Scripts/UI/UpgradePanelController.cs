@@ -69,7 +69,7 @@ public class UpgradePanelController : MonoBehaviour {
 	    
 	}
 
-    public void UpdatePanel()
+    private void UpdatePanel()
     {
         txtPtsAvailable.text = upgrader.AvailablePoints.ToString();
         txtHullRank.text = upgrader.GetRank(UpgradeType.Hull, true).ToString();

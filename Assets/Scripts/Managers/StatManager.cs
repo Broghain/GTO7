@@ -105,6 +105,16 @@ public class StatManager : MonoBehaviour {
         }
     }
 
+    public void IncreaseWaveNumber(int amount)
+    {
+        waveNumber += amount;
+        CheckWaveAchievement();
+        if (waveNumber > bestWave)
+        {
+            exceededBestWave = true;
+        }
+    }
+
     private void CheckWaveAchievement()
     {
         PlayerController player = GameManager.instance.GetPlayer().GetComponent<PlayerController>();
@@ -151,6 +161,16 @@ public class StatManager : MonoBehaviour {
     public void IncreaseKillCount()
     {
         killCount++;
+        CheckKillAchievement();
+        if (killCount > mostKills)
+        {
+            exceededMostKills = true;
+        }
+    }
+
+    public void IncreaseKillCount(int amount)
+    {
+        killCount += amount;
         CheckKillAchievement();
         if (killCount > mostKills)
         {

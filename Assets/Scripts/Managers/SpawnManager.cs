@@ -39,7 +39,6 @@ public class SpawnManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-        spawnBudget = startSpawnBudget;
         enemyPools = GetComponents<ObjectPooler>();
         if (dronePool == null)
         {

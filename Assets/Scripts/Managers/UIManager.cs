@@ -11,6 +11,12 @@ public class UIManager : MonoBehaviour {
     private PausePanelController pausePanel;
     [SerializeField]
     private GameObject gameOverPanel;
+    [SerializeField]
+    private APITrophyUnlockController trophyUnlockPanel;
+    [SerializeField]
+    private GameObject pauseButton;
+    [SerializeField]
+    private Animation hitFeedback;
 
     [SerializeField]
     private StatusBarController statusBars;
@@ -22,13 +28,20 @@ public class UIManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
+#if UNITY_ANDROID
+        pauseButton.SetActive(true);
+#endif
 	}
 	
 	// Update is called once per frame
 	void Update () {
         UpdateStatusBars();
 	}
+
+    public void ShowHitFeedback()
+    {
+        statusBars.ShowHitFeedback();
+    }
 
     private void UpdateStatusBars()
     {
@@ -75,5 +88,10 @@ public class UIManager : MonoBehaviour {
     public void PlayButtonSound(AudioClip buttonSound)
     {
         AudioManager.instance.PlaySound(buttonSound);
+    }
+
+    public void ShowTrophyUnlock(string name, string descr, Sprite img)
+    {
+        trophyUnlockPanel.AddUnlockedTrophy(name, descr, img);
     }
 }

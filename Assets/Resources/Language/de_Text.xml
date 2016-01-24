@@ -20,6 +20,8 @@
   <menu.txt.paused>Angehalten</menu.txt.paused>
   <menu.btn.restart>Wieder</menu.btn.restart>
   <menu.txt.gameover>Game Over</menu.txt.gameover>
+  <menu.btn.load>Spiel Laden</menu.btn.load>
+  <menu.btn.save>Spiel Speichern</menu.btn.save>
 
   <!--UI-->
   <ui.btn.upgradepanel>Öffnen Upgrade-Menü</ui.btn.upgradepanel>
@@ -47,5 +49,6 @@
   <api.txt.noconnection>Kann nicht an GameJolt verbinden</api.txt.noconnection>
   <api.txt.incorrect>Benutzername/Token Falsch</api.txt.incorrect>
   <api.input.username>Benutzername</api.input.username>
+  <api.txt.trophies>Trophäen</api.txt.trophies>
   
 </Language>
