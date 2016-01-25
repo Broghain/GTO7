@@ -68,7 +68,7 @@ public class UIManager : MonoBehaviour {
         {
             pausePanel.ClosePausePanel();
         }
-        else
+        else if(!GameManager.instance.GetGameOver())
         {
             pausePanel.OpenPausePanel();
         }

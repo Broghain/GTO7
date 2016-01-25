@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        if (Input.GetButtonDown("Cancel") && (!UIManager.instance.UpgradePanelOpen() || gameOver))
+        if (Input.GetButtonDown("Cancel") && !UIManager.instance.UpgradePanelOpen())
         {
             UIManager.instance.TogglePausePanel();
         }
